@@ -24,6 +24,7 @@ import WarehousesPage from './pages/warehouses/WarehousesPage';
 import RailPage from './pages/rail/RailPage';
 import ReportsPage from './pages/reports/ReportsPage';
 import AnalyticsPage from './pages/analytics/AnalyticsPage';
+import ExpensesPage from './pages/expenses/ExpensesPage';
 import NotificationsPage from './pages/notifications/NotificationsPage';
 import SettingsPage from './pages/settings/SettingsPage';
 import LiveUpdatesPage from './pages/live-updates/LiveUpdatesPage';
@@ -99,6 +100,7 @@ function App() {
                 <Route path="rail" element={<RailPage />} />
                 <Route path="reports" element={<ReportsPage />} />
                 <Route path="analytics" element={<AnalyticsPage />} />
+                <Route path="expenses" element={<ExpensesPage />} />
                 <Route path="notifications" element={<NotificationsPage />} />
                 <Route path="settings" element={<SettingsPage />} />
                 <Route path="live-updates" element={<LiveUpdatesPage />} />

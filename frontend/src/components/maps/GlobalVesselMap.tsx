@@ -22,6 +22,11 @@ const portIcon = L.divIcon({
 // Vadhvan Port approximate coordinates
 const VADHVAN_PORT: [number, number] = [19.803, 72.637];
 
+// Staggered port anchors so ships don't crash into each other
+const PORT_ANCHOR_1: [number, number] = [19.803, 72.637]; // Main
+const PORT_ANCHOR_2: [number, number] = [19.780, 72.620]; // South
+const PORT_ANCHOR_3: [number, number] = [19.825, 72.645]; // North
+
 // Mock ship data with paths approaching Vadhvan
 const SHIPS = [
   {
@@ -31,8 +36,9 @@ const SHIPS = [
     speed: 21.5,
     eta: '4 hrs',
     color: '#3B82F6',
+    offset: 0.2, // Offset to scatter them
     path: [
-      [18.5, 71.0], [19.0, 71.5], [19.4, 72.0], VADHVAN_PORT
+      [18.5, 71.0], [19.0, 71.5], [19.4, 72.0], PORT_ANCHOR_1
     ] as [number, number][]
   },
   {
@@ -42,8 +48,9 @@ const SHIPS = [
     speed: 18.2,
     eta: '6.5 hrs',
     color: '#8B5CF6',
+    offset: 0.7,
     path: [
-      [17.0, 72.0], [18.0, 72.2], [19.0, 72.4], VADHVAN_PORT
+      [17.0, 72.0], [18.0, 72.2], [19.0, 72.4], PORT_ANCHOR_2
     ] as [number, number][]
   },
   {
@@ -53,8 +60,9 @@ const SHIPS = [
     speed: 16.8,
     eta: '12 hrs',
     color: '#10B981',
+    offset: 0.45,
     path: [
-      [21.5, 70.0], [20.8, 71.2], [20.2, 72.0], VADHVAN_PORT
+      [21.5, 70.0], [20.8, 71.2], [20.2, 72.0], PORT_ANCHOR_3
     ] as [number, number][]
   }
 ];
@@ -62,12 +70,12 @@ const SHIPS = [
 export default function GlobalVesselMap() {
   const [activeShip, setActiveShip] = useState<string | null>(null);
   
-  // Animation state to move ships along their paths
-  const [progress, setProgress] = useState(0.7); // 70% along the path initially
+  // Animation state to move ships along their paths independently
+  const [time, setTime] = useState(Date.now());
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setProgress(p => (p + 0.001) % 1);
+      setTime(Date.now());
     }, 100);
     return () => clearInterval(interval);
   }, []);
@@ -118,7 +126,11 @@ export default function GlobalVesselMap() {
 
         {/* Ships and Paths */}
         {SHIPS.map((ship) => {
-          const currentPos = getInterpolatedPosition(ship.path, progress);
+          // Calculate unique progress for each ship based on its speed and offset
+          // so they don't move in sync or crash into each other
+          const cycleDuration = 3000000 / ship.speed; // Adjust divisor for realism
+          const shipProgress = ((time % cycleDuration) / cycleDuration + ship.offset) % 1;
+          const currentPos = getInterpolatedPosition(ship.path, shipProgress);
           return (
             <React.Fragment key={ship.id}>
               <Polyline 
