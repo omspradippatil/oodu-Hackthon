@@ -13,6 +13,7 @@ import {
 interface BarChartWidgetProps {
   data: Array<{ name: string; value: number; color?: string; [key: string]: any }>;
   defaultColor?: string;
+  [key: string]: any;
 }
 
 export const BarChartWidget: React.FC<BarChartWidgetProps> = ({

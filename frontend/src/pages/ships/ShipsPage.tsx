@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Plus, Search, Ship, Anchor, LogOut } from 'lucide-react';
+import { Plus, Search, Ship as ShipIcon, Anchor, LogOut } from 'lucide-react';
 import { shipsApi, docksApi } from '../../services/api';
 import StatusBadge from '../../components/ui/StatusBadge';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
@@ -124,7 +124,7 @@ export default function ShipsPage() {
               {filtered.map(s=>(
                 <tr key={s.id}>
                   <td className="text-data font-mono">{s.imoNumber}</td>
-                  <td className="text-data font-semibold flex items-center gap-2"><Ship size={14} className="text-secondary"/>{s.name}</td>
+                  <td className="text-data font-semibold flex items-center gap-2"><ShipIcon size={14} className="text-secondary"/>{s.name}</td>
                   <td className="text-data">{s.cargoType}</td>
                   <td className="text-data">{s.containerCount}</td>
                   <td><span className={PRIORITY_BADGE[s.priority]||'badge'}>{s.priority}</span></td>

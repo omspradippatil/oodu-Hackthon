@@ -22,7 +22,7 @@
 ```
 oodu-Hackthon/
 ├── frontend/          ← React 19 + TypeScript + Vite + Tailwind + Shadcn
-├── backend/           ← Node.js + Express + TypeScript + Prisma + PostgreSQL
+├── backend/           ← Node.js + Express + TypeScript + Prisma + MySQL
 ├── Design/            ← Reference UI designs (DO NOT MODIFY)
 ├── AI_MEMORY.md       ← This file (read first every session)
 ├── README.md          ← Full project documentation
@@ -46,7 +46,7 @@ oodu-Hackthon/
 - Node.js + Express.js + TypeScript
 - JWT Authentication: accessToken (15min) + refreshToken (7d, httpOnly cookie)
 - Bcrypt (12 rounds), Helmet, CORS, Morgan, Compression
-- Prisma ORM → PostgreSQL
+- Prisma ORM → MySQL (compatible with sql308.byethost33.com)
 - Server-Sent Events (SSE) for real-time updates via sseManager
 - Rate limiting (100/15min general, 10/15min auth)
 - Zod validation on all inputs
@@ -100,7 +100,7 @@ Text Secondary:          #44474C  → tailwind: text-on-surface-variant
 
 ---
 
-## 🗄️ DATABASE SCHEMA (PostgreSQL via Prisma)
+## 🗄️ DATABASE SCHEMA (MySQL via Prisma)
 
 ### Location: `backend/src/prisma/schema.prisma`
 
@@ -422,9 +422,9 @@ VITE_CLOUDFLARE_WORKER_URL=https://your-worker.workers.dev
 
 ### Backend (backend/.env)
 ```env
-DATABASE_URL=postgresql://user:password@localhost:5432/vadhvan_port
-JWT_SECRET=your-jwt-secret-min-32-chars
-JWT_REFRESH_SECRET=your-refresh-secret-min-32-chars
+DATABASE_URL=mysql://b33_39246376:OM%40om123@sql308.byethost33.com:3306/b33_39246376_oodu
+JWT_SECRET=vadhvan-goes-port-super-secret-key-32-characters
+JWT_REFRESH_SECRET=vadhvan-goes-port-super-refresh-key-32-characters
 PORT=5000
 NODE_ENV=development
 CLOUDFLARE_API_TOKEN=your-api-token
@@ -435,10 +435,10 @@ ALLOWED_ORIGINS=http://localhost:5173
 ```
 
 ### Demo Credentials (from seed)
-- Admin: `admin@vadhvanport.in` / `Admin@123`
-- Manager: `manager@vadhvanport.in` / `Manager@123`
-- Fleet: `fleet@vadhvanport.in` / `Fleet@123`
-- Driver: `driver@vadhvanport.in` / `Driver@123`
+- Admin (Full Permissions): `om@gmail.com` / `om123`
+- Default Admin: `admin@vadhvanport.com` / `Admin@123`
+- Manager: `ops@vadhvanport.com` / `Ops@123`
+- Fleet: `fleet@vadhvanport.com` / `Fleet@123`
 
 ---
 
@@ -446,9 +446,9 @@ ALLOWED_ORIGINS=http://localhost:5173
 
 | Service | Platform |
 |---------|----------|
-| Frontend | Vercel (auto deploy on push) |
-| Backend | Render / Railway |
-| Database | PostgreSQL (Render / Supabase) |
+| Frontend | Netlify (SPA routing optimised via _redirects) |
+| Backend | ByteHost / Node Server |
+| Database | MySQL (sql308.byethost33.com) |
 | Real-time | SSE via backend + Cloudflare Worker proxy |
 | CI/CD | GitHub Actions |
 
@@ -504,7 +504,7 @@ ALLOWED_ORIGINS=http://localhost:5173
 
 1. **Design**: ALL colors MUST use tailwind tokens from tailwind.config.js
 2. **No placeholders**: Every module fetches real data from API
-3. **PostgreSQL only**: Never use SQLite or in-memory DBs
+3. **MySQL only**: Never use SQLite or in-memory DBs
 4. **JWT**: Access 15min, Refresh 7d httpOnly cookie
 5. **Status Atomicity**: Vehicle + Driver status in Prisma $transaction
 6. **Role Guards**: Every sensitive API route has requireRole() middleware

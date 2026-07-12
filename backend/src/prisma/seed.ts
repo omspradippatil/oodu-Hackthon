@@ -10,6 +10,17 @@ async function main() {
   const passwordRounds = 12;
   const users = await Promise.all([
     prisma.user.upsert({
+      where: { email: 'om@gmail.com' },
+      update: {},
+      create: {
+        email: 'om@gmail.com',
+        passwordHash: await bcrypt.hash('om123', passwordRounds),
+        name: 'Om Patil',
+        role: 'ADMIN',
+        status: 'ACTIVE',
+      },
+    }),
+    prisma.user.upsert({
       where: { email: 'admin@vadhvanport.com' },
       update: {},
       create: {

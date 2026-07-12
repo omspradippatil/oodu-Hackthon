@@ -12,6 +12,7 @@ import {
 interface LineChartWidgetProps {
   data: Array<{ name: string; value: number; [key: string]: any }>;
   color?: string;
+  [key: string]: any;
 }
 
 export const LineChartWidget: React.FC<LineChartWidgetProps> = ({

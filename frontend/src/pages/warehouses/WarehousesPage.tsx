@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Plus, Warehouse, Package } from 'lucide-react';
+import { Plus, Warehouse as WarehouseIcon, Package } from 'lucide-react';
 import { warehousesApi } from '../../services/api';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import EmptyState from '../../components/ui/EmptyState';
@@ -56,7 +56,7 @@ export default function WarehousesPage() {
 
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label:'Total Warehouses', value:list.length, icon:Warehouse },
+          { label:'Total Warehouses', value:list.length, icon:WarehouseIcon },
           { label:'Total Capacity', value:`${totalCapacity.toLocaleString()} TEU`, icon:Package },
           { label:'Occupied Space', value:`${totalOccupied.toLocaleString()} TEU`, icon:Package },
         ].map(k=>(
@@ -80,7 +80,7 @@ export default function WarehousesPage() {
               <div key={w.id} className="card p-5">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-md bg-gray-50 text-secondary"><Warehouse size={20}/></div>
+                    <div className="p-2 rounded-md bg-gray-50 text-secondary"><WarehouseIcon size={20}/></div>
                     <div>
                       <h3 className="text-title-lg font-bold text-on-surface">{w.name}</h3>
                       {w.locationLat && <p className="text-label-sm text-on-surface-variant">{w.locationLat.toFixed(4)}, {w.locationLng?.toFixed(4)}</p>}

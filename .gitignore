@@ -45,3 +45,7 @@ Thumbs.db
 # Database / Prisma
 /backend/src/prisma/*.db
 /backend/src/prisma/*.db-journal
+
+# Build cache and outputs
+*.tsbuildinfo
+backend/dist/

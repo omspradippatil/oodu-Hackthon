@@ -164,7 +164,7 @@ export default function ReportsPage() {
     </table>
   );
 
-  const RENDERERS: Record<ReportTab, ()=>JSX.Element> = {
+  const RENDERERS: Record<ReportTab, () => any> = {
     fleet: renderFleet, trips: renderTrips, fuel: renderFuel,
     expenses: renderExpenses, maintenance: renderMaintenance,
     containers: renderContainers, 'driver-performance': renderDriverPerf,

@@ -66,7 +66,7 @@ Every module communicates with every other module. Status changes propagate auto
 | Express.js | 4.x | Web Framework |
 | TypeScript | 5.x | Type Safety |
 | Prisma ORM | 5.x | Database ORM |
-| PostgreSQL | 15+ | Database |
+| MySQL | 8.x / 5.7 / ByteHost | Database |
 | JWT | 9.x | Authentication |
 | Bcrypt | 2.x | Password Hashing |
 | Helmet | 8.x | Security Headers |
@@ -133,8 +133,8 @@ oodu-Hackthon/
 │   │   ├── controllers/               # Request handlers
 │   │   ├── routes/                    # Express routers
 │   │   ├── prisma/
-│   │   │   ├── schema.prisma          # PostgreSQL schema (19 models)
-│   │   │   └── seed.ts                # Realistic seed data
+│   │   │   ├── schema.prisma          # MySQL schema (19 models)
+│   │   │   └── seed.ts                # Realistic seed data (includes om@gmail.com)
 │   │   └── utils/
 │   │       ├── jwt.ts                 # JWT sign/verify
 │   │       ├── response.ts            # Response helpers
@@ -155,7 +155,7 @@ oodu-Hackthon/
 
 ### Prerequisites
 - Node.js 20+ 
-- PostgreSQL 15+
+- MySQL 5.7+ or PostgreSQL compatible with MySQL mode (e.g. ByteHost sql308.byethost33.com)
 - npm or yarn
 
 ### 1. Clone & Install
@@ -172,34 +172,38 @@ npm install
 
 ### 2. Database Setup
 
-```bash
-# Create PostgreSQL database
-psql -U postgres -c "CREATE DATABASE vadhvan_port;"
+You can structure your MySQL database using either Prisma ORM or the pre-generated [schema.sql](file:///c:/Users/OM/Desktop/Projects/oodu-Hackthon/schema.sql) file.
 
+**Option A: Setup via Prisma ORM**
+```bash
 # Copy environment file
 cd backend
 cp .env.example .env
 
-# Edit .env with your database credentials
-# DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/vadhvan_port
+# Edit .env with your MySQL connection string.
+# Ensure any '@' symbol in your password is URL-encoded as '%40'
+# Example: DATABASE_URL="mysql://b33_39246376:OM%40om123@sql308.byethost33.com:3306/b33_39246376_oodu"
 
 # Generate Prisma client
-npm run db:generate
+npm run db:generate -- --schema=src/prisma/schema.prisma
 
-# Run migrations
-npm run db:migrate
+# Push schema directly to MySQL database
+npx prisma db push --schema=src/prisma/schema.prisma
 
-# Seed with realistic port data
+# Seed database with mock data (including om@gmail.com ADMIN user)
 npm run db:seed
 ```
+
+**Option B: Setup via Raw SQL**
+Import the raw DDL table structure statements directly into your MySQL server (via phpMyAdmin, vPanel, or command line) using the root [schema.sql](file:///c:/Users/OM/Desktop/Projects/oodu-Hackthon/schema.sql) file.
 
 ### 3. Configure Environment
 
 **Backend `.env`:**
 ```env
-DATABASE_URL=postgresql://user:password@localhost:5432/vadhvan_port
-JWT_SECRET=your-super-secret-jwt-key-min-32-chars
-JWT_REFRESH_SECRET=your-refresh-secret-min-32-chars
+DATABASE_URL="mysql://b33_39246376:OM%40om123@sql308.byethost33.com:3306/b33_39246376_oodu"
+JWT_SECRET=vadhvan-goes-port-super-secret-key-32-characters
+JWT_REFRESH_SECRET=vadhvan-goes-port-super-refresh-key-32-characters
 PORT=5000
 NODE_ENV=development
 BCRYPT_ROUNDS=12
@@ -297,7 +301,7 @@ Score = (Fleet Availability × 0.25) +
 
 ## 📊 Database Schema
 
-19 PostgreSQL tables via Prisma ORM:
+19 MySQL tables via Prisma ORM:
 - `users`, `vehicles`, `drivers`, `trips`
 - `ships`, `docks`, `containers`, `container_requests`
 - `equipment`, `maintenance_logs`, `fuel_logs`, `expenses`
@@ -409,25 +413,23 @@ services:
 
 ## 🚀 Deployment
 
-### Frontend → Vercel
-```bash
-cd frontend
-npm run build
-# Deploy dist/ to Vercel
-```
+### Frontend → Netlify
+1. Log into Netlify.
+2. Select your repository.
+3. Configure build settings:
+   - **Build command**: `npm run build`
+   - **Publish directory**: `frontend/dist`
+4. The frontend is fully optimized for SPA routing on Netlify via the [frontend/public/_redirects](file:///c:/Users/OM/Desktop/Projects/oodu-Hackthon/frontend/public/_redirects) file.
 
-### Backend → Render / Railway
-```bash
-cd backend
-npm run build
-# Deploy with DATABASE_URL pointing to production PostgreSQL
-```
+### Backend → ByteHost / VPS Node Server
+1. Upload the `backend/` folder contents to your hosting server.
+2. Install dependencies: `npm install --omit=dev`.
+3. Configure environmental variables on your hosting environment.
+4. Run `npm run build` then `npm start`.
 
-### Database → Supabase / Render PostgreSQL
-```bash
-# Set DATABASE_URL in backend environment
-# Run: npm run db:migrate
-# Run: npm run db:seed
+### Database → ByteHost MySQL (sql308.byethost33.com)
+1. Set the URL-encoded connection string in your backend `.env` variables.
+2. Run database push and seeding (`npx prisma db push` & `npm run db:seed`).
 ```
 
 ---

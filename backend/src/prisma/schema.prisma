@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -310,7 +310,7 @@ model RailTrack {
   capacity      Int
   destination   String?
   departureTime DateTime?
-  containerIds  String[]        @default([])
+  containerIds  Json            @default("[]")
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 

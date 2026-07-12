@@ -3,27 +3,42 @@ import { AlertTriangle } from 'lucide-react';
 
 interface ConfirmDialogProps {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onOpenChange?: (open: boolean) => void;
+  onCancel?: () => void;
   title: string;
-  description: string;
+  description?: string;
+  message?: string;
   confirmLabel?: string;
   cancelLabel?: string;
   onConfirm: () => void;
   variant?: 'danger' | 'warning' | 'default';
   isLoading?: boolean;
+  loading?: boolean;
 }
 
 export default function ConfirmDialog({
   open,
   onOpenChange,
+  onCancel,
   title,
   description,
+  message,
   confirmLabel = 'Confirm',
   cancelLabel = 'Cancel',
   onConfirm,
   variant = 'danger',
   isLoading = false,
+  loading = false,
 }: ConfirmDialogProps) {
+  const displayDescription = description || message || 'Are you sure you want to proceed?';
+  const displayLoading = isLoading || loading;
+  
+  const handleOpenChange = onOpenChange || ((o) => {
+    if (!o && onCancel) {
+      onCancel();
+    }
+  });
+
   const btnClass =
     variant === 'danger'
       ? 'bg-error text-white hover:bg-red-600'
@@ -32,7 +47,7 @@ export default function ConfirmDialog({
       : 'bg-secondary text-white hover:bg-blue-600';
 
   return (
-    <AlertDialog.Root open={open} onOpenChange={onOpenChange}>
+    <AlertDialog.Root open={open} onOpenChange={handleOpenChange}>
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="fixed inset-0 bg-black/40 z-50 animate-fade-in" />
         <AlertDialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-white rounded-md shadow-modal border border-outline-variant p-6 w-full max-w-sm animate-fade-in">
@@ -43,21 +58,26 @@ export default function ConfirmDialog({
             <AlertDialog.Title className="text-title-lg text-on-surface">{title}</AlertDialog.Title>
           </div>
           <AlertDialog.Description className="text-body-sm text-on-surface-variant mb-6">
-            {description}
+            {displayDescription}
           </AlertDialog.Description>
           <div className="flex gap-3 justify-end">
             <AlertDialog.Cancel asChild>
-              <button className="px-4 py-2 text-body-sm border border-outline-variant rounded-md text-on-surface hover:bg-surface-container transition-colors">
+              <button 
+                type="button"
+                onClick={onCancel}
+                className="px-4 py-2 text-body-sm border border-outline-variant rounded-md text-on-surface hover:bg-surface-container transition-colors"
+              >
                 {cancelLabel}
               </button>
             </AlertDialog.Cancel>
             <AlertDialog.Action asChild>
               <button
+                type="button"
                 onClick={onConfirm}
-                disabled={isLoading}
+                disabled={displayLoading}
                 className={`px-4 py-2 text-body-sm rounded-md font-medium transition-colors disabled:opacity-50 ${btnClass}`}
               >
-                {isLoading ? 'Processing…' : confirmLabel}
+                {displayLoading ? 'Processing…' : confirmLabel}
               </button>
             </AlertDialog.Action>
           </div>
