@@ -1,4 +1,3 @@
-# Vadhvan GOES Port – Smart Digital Twin Intelligent Platform
 
 > **Smart Transit & Resource Synchronization Platform for Vadhvan Port**  
 > Built for the **Odoo Hackathon 2026 – TransitOps Problem Statement**
