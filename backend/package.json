@@ -4,14 +4,14 @@
   "description": "Vadhvan GOES Port – Smart Digital Twin Platform API",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "node dist/index.js",
     "build": "tsc",
     "start": "node dist/index.js",
-    "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev",
-    "db:push": "prisma db push",
+    "db:generate": "prisma generate --schema=src/prisma/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema=src/prisma/schema.prisma",
+    "db:push": "prisma db push --schema=src/prisma/schema.prisma",
     "db:seed": "tsx src/prisma/seed.ts",
-    "db:studio": "prisma studio",
+    "db:studio": "prisma studio --schema=src/prisma/schema.prisma",
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
