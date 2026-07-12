@@ -3,6 +3,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SSEProvider } from './contexts/SSEContext';
 import AppLayout from './components/layouts/AppLayout';
+import { Toaster } from 'react-hot-toast';
+import { useIoTSimulator } from './hooks/useIoTSimulator';
 
 // Pages
 import LoginPage from './pages/auth/LoginPage';
@@ -12,6 +14,7 @@ import FleetPage from './pages/fleet/FleetPage';
 import DriversPage from './pages/drivers/DriversPage';
 import TripsPage from './pages/trips/TripsPage';
 import ContainersPage from './pages/containers/ContainersPage';
+import ContainerTrackingPage from './pages/containers/ContainerTrackingPage';
 import EquipmentPage from './pages/equipment/EquipmentPage';
 import MaintenancePage from './pages/maintenance/MaintenancePage';
 import FuelPage from './pages/fuel/FuelPage';
@@ -56,10 +59,17 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function IoTWrapper({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useAuth();
+  useIoTSimulator(isAuthenticated); // Only run simulation when logged in
+  return <>{children}</>;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <IoTWrapper>
         <SSEProvider>
           <BrowserRouter>
             <Routes>
@@ -79,6 +89,7 @@ function App() {
                 <Route path="drivers" element={<DriversPage />} />
                 <Route path="trips" element={<TripsPage />} />
                 <Route path="containers" element={<ContainersPage />} />
+                <Route path="tracking" element={<ContainerTrackingPage />} />
                 <Route path="equipment" element={<EquipmentPage />} />
                 <Route path="maintenance" element={<MaintenancePage />} />
                 <Route path="fuel" element={<FuelPage />} />
@@ -95,7 +106,9 @@ function App() {
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </BrowserRouter>
+          <Toaster position="top-right" toastOptions={{ className: 'text-sm font-medium shadow-xl border border-outline-variant' }} />
         </SSEProvider>
+        </IoTWrapper>
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -24,6 +24,7 @@ import {
   CircleGauge,
   DollarSign,
   Activity,
+  Search
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSSE } from '@/contexts/SSEContext';
@@ -43,6 +44,7 @@ const navItems: NavItem[] = [
   { path: '/drivers', label: 'Drivers', icon: <Users size={20} /> },
   { path: '/trips', label: 'Trip Management', icon: <Route size={20} /> },
   { path: '/containers', label: 'Containers', icon: <Package size={20} /> },
+  { path: '/tracking', label: 'Container Tracking', icon: <Search size={20} /> },
   { path: '/ships', label: 'Ship Arrivals', icon: <Ship size={20} /> },
   { path: '/docks', label: 'Dock Management', icon: <Anchor size={20} /> },
   { path: '/equipment', label: 'Equipment', icon: <Boxes size={20} /> },

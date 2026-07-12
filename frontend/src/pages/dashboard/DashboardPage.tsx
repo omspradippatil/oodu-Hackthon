@@ -7,6 +7,7 @@ import AreaChartWidget from '@/components/charts/AreaChartWidget';
 import BarChartWidget from '@/components/charts/BarChartWidget';
 import PieChartWidget from '@/components/charts/PieChartWidget';
 import LineChartWidget from '@/components/charts/LineChartWidget';
+import GlobalVesselMap from '@/components/maps/GlobalVesselMap';
 import {
   Truck,
   Users,
@@ -128,6 +129,11 @@ export const DashboardPage: React.FC = () => {
           icon={<CheckCircle size={20} className="text-success" />}
           subtitle="Today's total throughput"
         />
+      </div>
+
+      {/* Global Vessel Map */}
+      <div className="bg-white border border-outline-variant rounded-md shadow-card p-6 h-[400px]">
+        <GlobalVesselMap />
       </div>
 
       {/* Charts Grid */}

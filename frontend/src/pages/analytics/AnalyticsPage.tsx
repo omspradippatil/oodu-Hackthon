@@ -1,12 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Bot, LineChart } from 'lucide-react';
 import { analyticsApi } from '../../services/api';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import AreaChartWidget from '../../components/charts/AreaChartWidget';
 import BarChartWidget from '../../components/charts/BarChartWidget';
 import PieChartWidget from '../../components/charts/PieChartWidget';
 import LineChartWidget from '../../components/charts/LineChartWidget';
+import AIPredictionsTab from '../../components/analytics/AIPredictionsTab';
 
 export default function AnalyticsPage() {
+  const [activeTab, setActiveTab] = useState<'standard' | 'ai'>('standard');
   const { data, isLoading } = useQuery({
     queryKey: ['analytics-charts'],
     queryFn: () => analyticsApi.getCharts(),
@@ -47,12 +51,31 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-display-lg text-on-surface">Analytics</h1>
-        <p className="text-body-sm text-on-surface-variant mt-1">Operational intelligence and performance trends</p>
+        <h1 className="text-display-lg text-on-surface">Analytics & Intelligence</h1>
+        <p className="text-body-sm text-on-surface-variant mt-1">Operational intelligence, performance trends, and AI predictions</p>
       </div>
 
-      {/* Row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="flex gap-2 border-b border-outline-variant pb-2">
+        <button 
+          onClick={() => setActiveTab('standard')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-colors ${activeTab === 'standard' ? 'bg-port-navy text-white' : 'text-on-surface-variant hover:bg-surface-container'}`}
+        >
+          <LineChart size={18} /> Standard Metrics
+        </button>
+        <button 
+          onClick={() => setActiveTab('ai')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-colors ${activeTab === 'ai' ? 'bg-secondary text-white shadow-md' : 'text-on-surface-variant hover:bg-surface-container'}`}
+        >
+          <Bot size={18} /> Vadhvan AI Insights
+        </button>
+      </div>
+
+      {activeTab === 'ai' ? (
+        <AIPredictionsTab />
+      ) : (
+        <>
+          {/* Row 1 */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card p-5">
           <h2 className="text-headline-sm font-semibold mb-4">Fleet Utilization (%)</h2>
           <AreaChartWidget
@@ -140,7 +163,9 @@ export default function AnalyticsPage() {
             </tbody>
           </table>
         </div>
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
