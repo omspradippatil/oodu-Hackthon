@@ -1,0 +1,561 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  ADMIN
+  OPERATIONS_MANAGER
+  FLEET_MANAGER
+  MAINTENANCE_SUPERVISOR
+  DRIVER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum VehicleType {
+  TRUCK
+  TRAILER
+  FORKLIFT
+  REACH_STACKER
+  CRANE_TRUCK
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  ON_TRIP
+  IN_SHOP
+  RETIRED
+}
+
+enum DriverStatus {
+  AVAILABLE
+  ON_TRIP
+  OFF_DUTY
+  SUSPENDED
+}
+
+enum ShipPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ShipStatus {
+  WAITING
+  DOCKED
+  LOADING
+  UNLOADING
+  COMPLETED
+  DEPARTED
+}
+
+enum DockStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+enum RailTrackStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+enum ContainerPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ContainerStatus {
+  WAITING
+  ALLOCATED
+  LOADING
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+}
+
+enum ContainerRequestStatus {
+  PENDING
+  ASSIGNED
+  DISPATCHED
+  COMPLETED
+  CANCELLED
+}
+
+enum EquipmentType {
+  CRANE
+  FORKLIFT
+  REACH_STACKER
+  TRAILER
+  MATERIAL_HANDLER
+}
+
+enum EquipmentStatus {
+  AVAILABLE
+  BUSY
+  MAINTENANCE
+  OFFLINE
+}
+
+enum TripStatus {
+  DRAFT
+  APPROVED
+  DISPATCHED
+  LOADING
+  IN_TRANSIT
+  DELIVERED
+  COMPLETED
+  CANCELLED
+}
+
+enum TripPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum MaintenanceType {
+  OIL_CHANGE
+  INSPECTION
+  TYRE_REPLACEMENT
+  BRAKE_SERVICE
+  ENGINE_SERVICE
+  REPAIR
+  SCHEDULED
+  EMERGENCY
+}
+
+enum MaintenanceStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ExpenseType {
+  MAINTENANCE
+  FUEL
+  TOLL
+  PARKING
+  INSURANCE
+  REPAIR
+  OTHER
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  name         String
+  role         UserRole   @default(DRIVER)
+  status       UserStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  notifications Notification[]
+  activityLogs  ActivityLog[]
+  auditLogs     AuditLog[]
+
+  @@index([email])
+  @@index([role])
+  @@index([status])
+  @@map("users")
+}
+
+model Vehicle {
+  id             String        @id @default(cuid())
+  registrationNo String        @unique
+  name           String
+  model          String
+  type           VehicleType
+  status         VehicleStatus @default(AVAILABLE)
+  maxCapacity    Float
+  odometer       Float         @default(0)
+  fuelLevel      Float         @default(100)
+  healthScore    Int           @default(100)
+  locationLat    Float?
+  locationLng    Float?
+  driverId       String?       @unique
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  driver          Driver?          @relation("VehicleDriver", fields: [driverId], references: [id])
+  trips           Trip[]
+  maintenanceLogs MaintenanceLogs[]
+  fuelLogs        FuelLog[]
+  expenses        Expense[]
+  gpsLogs         GpsLog[]
+
+  @@index([status])
+  @@index([type])
+  @@index([registrationNo])
+  @@map("vehicles")
+}
+
+model Driver {
+  id               String       @id @default(cuid())
+  name             String
+  photoUrl         String?
+  licenseNo        String       @unique
+  licenseCategory  String
+  licenseExpiry    DateTime
+  phone            String
+  emergencyContact String?
+  safetyScore      Int          @default(100)
+  experienceYears  Int          @default(0)
+  status           DriverStatus @default(AVAILABLE)
+  vehicleId        String?      @unique
+  userId           String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  vehicle Vehicle? @relation("VehicleDriver")
+  trips   Trip[]
+  fuelLogs FuelLog[]
+
+  @@index([status])
+  @@index([licenseNo])
+  @@index([userId])
+  @@map("drivers")
+}
+
+model Ship {
+  id               String       @id @default(cuid())
+  imoNumber        String       @unique
+  name             String
+  arrivalTime      DateTime
+  expectedDeparture DateTime?
+  dockId           String?
+  containerCount   Int          @default(0)
+  priority         ShipPriority @default(MEDIUM)
+  cargoType        String
+  shipLength       Float?
+  shipWidth        Float?
+  draft            Float?
+  status           ShipStatus   @default(WAITING)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  dock       Dock?       @relation("DockShip")
+  containers Container[]
+
+  @@index([status])
+  @@index([imoNumber])
+  @@index([priority])
+  @@map("ships")
+}
+
+model Dock {
+  id                  String     @id @default(cuid())
+  dockNumber          String     @unique
+  status              DockStatus @default(AVAILABLE)
+  assignedShipId      String?    @unique
+  assignedCraneId     String?
+  containerCount      Int        @default(0)
+  estimatedCompletion DateTime?
+  warehouseId         String?
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  assignedShip Ship?       @relation("DockShip", fields: [assignedShipId], references: [id])
+  warehouse    Warehouse?  @relation(fields: [warehouseId], references: [id])
+  containers   Container[] @relation("SourceDock")
+
+  @@index([status])
+  @@index([dockNumber])
+  @@map("docks")
+}
+
+model Warehouse {
+  id            String   @id @default(cuid())
+  name          String
+  capacity      Float
+  availableSpace Float
+  occupiedSpace  Float   @default(0)
+  locationLat   Float?
+  locationLng   Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  docks      Dock[]
+  containers Container[] @relation("DestWarehouse")
+
+  @@index([name])
+  @@map("warehouses")
+}
+
+model RailTrack {
+  id            String          @id @default(cuid())
+  trackNumber   String          @unique
+  status        RailTrackStatus @default(AVAILABLE)
+  capacity      Int
+  destination   String?
+  departureTime DateTime?
+  containerIds  String[]        @default([])
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([status])
+  @@index([trackNumber])
+  @@map("rail_tracks")
+}
+
+model Container {
+  id            String            @id @default(cuid())
+  containerCode String            @unique
+  weight        Float
+  priority      ContainerPriority @default(MEDIUM)
+  status        ContainerStatus
+  sourceDockId  String?
+  destWarehouseId String?
+  shipId        String?
+  craneId       String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  sourceDock    Dock?      @relation("SourceDock", fields: [sourceDockId], references: [id])
+  destWarehouse Warehouse? @relation("DestWarehouse", fields: [destWarehouseId], references: [id])
+  ship          Ship?      @relation(fields: [shipId], references: [id])
+  requests      ContainerRequest[]
+  trips         Trip[]
+
+  @@index([status])
+  @@index([priority])
+  @@index([containerCode])
+  @@map("containers")
+}
+
+model ContainerRequest {
+  id          String                 @id @default(cuid())
+  containerId String
+  requestedBy String
+  vehicleId   String?
+  driverId    String?
+  status      ContainerRequestStatus @default(PENDING)
+  notes       String?
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+
+  container Container @relation(fields: [containerId], references: [id])
+
+  @@index([status])
+  @@index([containerId])
+  @@map("container_requests")
+}
+
+model Equipment {
+  id              String          @id @default(cuid())
+  name            String
+  equipmentNumber String          @unique
+  type            EquipmentType
+  status          EquipmentStatus @default(AVAILABLE)
+  healthScore     Int             @default(100)
+  maintenanceDue  DateTime?
+  assignedDockId  String?
+  operatorId      String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  maintenanceLogs MaintenanceLogs[]
+
+  @@index([status])
+  @@index([type])
+  @@index([equipmentNumber])
+  @@map("equipment")
+}
+
+model Trip {
+  id              String       @id @default(cuid())
+  tripNumber      String       @unique
+  containerId     String?
+  vehicleId       String
+  driverId        String
+  source          String
+  destination     String
+  cargoWeight     Float
+  plannedDistance Float?
+  estimatedTime   Int?
+  status          TripStatus   @default(DRAFT)
+  priority        TripPriority @default(MEDIUM)
+  notes           String?
+  dispatchedAt    DateTime?
+  completedAt     DateTime?
+  cancelledAt     DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  vehicle   Vehicle    @relation(fields: [vehicleId], references: [id])
+  driver    Driver     @relation(fields: [driverId], references: [id])
+  container Container? @relation(fields: [containerId], references: [id])
+  fuelLogs  FuelLog[]
+  expenses  Expense[]
+
+  @@index([status])
+  @@index([priority])
+  @@index([vehicleId])
+  @@index([driverId])
+  @@index([tripNumber])
+  @@map("trips")
+}
+
+model MaintenanceLogs {
+  id             String            @id @default(cuid())
+  vehicleId      String?
+  equipmentId    String?
+  type           MaintenanceType
+  description    String
+  technicianName String?
+  cost           Float             @default(0)
+  status         MaintenanceStatus @default(OPEN)
+  scheduledAt    DateTime?
+  completedAt    DateTime?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  vehicle   Vehicle?   @relation(fields: [vehicleId], references: [id])
+  equipment Equipment? @relation(fields: [equipmentId], references: [id])
+
+  @@index([status])
+  @@index([vehicleId])
+  @@index([equipmentId])
+  @@index([type])
+  @@map("maintenance_logs")
+}
+
+model FuelLog {
+  id              String   @id @default(cuid())
+  vehicleId       String
+  driverId        String?
+  tripId          String?
+  quantityLitres  Float
+  costPerLitre    Float
+  totalCost       Float
+  mileage         Float?
+  distanceCovered Float?
+  loggedAt        DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+  driver  Driver? @relation(fields: [driverId], references: [id])
+  trip    Trip?   @relation(fields: [tripId], references: [id])
+
+  @@index([vehicleId])
+  @@index([driverId])
+  @@index([loggedAt])
+  @@map("fuel_logs")
+}
+
+model Expense {
+  id          String      @id @default(cuid())
+  tripId      String?
+  vehicleId   String
+  type        ExpenseType
+  amount      Float
+  description String?
+  createdAt   DateTime    @default(now())
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+  trip    Trip?   @relation(fields: [tripId], references: [id])
+
+  @@index([vehicleId])
+  @@index([tripId])
+  @@index([type])
+  @@map("expenses")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String?
+  type      String
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([read])
+  @@map("notifications")
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  module    String
+  entityId  String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([module])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  tableName String
+  recordId  String
+  oldValues Json?
+  newValues Json?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([tableName])
+  @@index([recordId])
+  @@map("audit_logs")
+}
+
+model GpsLog {
+  id        String   @id @default(cuid())
+  vehicleId String
+  latitude  Float
+  longitude Float
+  speed     Float    @default(0)
+  isOffline Boolean  @default(false)
+  timestamp DateTime @default(now())
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+
+  @@index([vehicleId])
+  @@index([timestamp])
+  @@map("gps_logs")
+}
+
+model Settings {
+  id                String   @id @default("settings")
+  orgName           String   @default("Vadhvan Port")
+  theme             String   @default("light")
+  language          String   @default("en")
+  notificationPrefs Json     @default("{}")
+  updatedAt         DateTime @updatedAt
+
+  @@map("settings")
+}
