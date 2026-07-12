@@ -359,18 +359,37 @@ export const settingsService = {
           orgName: 'Vadhvan Port',
           theme: 'light',
           language: 'en',
-          notificationPrefs: {},
+          notificationPrefs: '{}',
         },
       });
+    }
+    if (settings && typeof settings.notificationPrefs === 'string') {
+      try {
+        (settings as any).notificationPrefs = JSON.parse(settings.notificationPrefs);
+      } catch {
+        (settings as any).notificationPrefs = {};
+      }
     }
     return settings;
   },
 
   async update(data: any) {
-    return prisma.settings.update({
+    const updateData = { ...data };
+    if (updateData.notificationPrefs && typeof updateData.notificationPrefs === 'object') {
+      updateData.notificationPrefs = JSON.stringify(updateData.notificationPrefs);
+    }
+    const settings = await prisma.settings.update({
       where: { id: 'settings' },
-      data,
+      data: updateData,
     });
+    if (settings && typeof settings.notificationPrefs === 'string') {
+      try {
+        (settings as any).notificationPrefs = JSON.parse(settings.notificationPrefs);
+      } catch {
+        (settings as any).notificationPrefs = {};
+      }
+    }
+    return settings;
   },
 };
 

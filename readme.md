@@ -172,25 +172,20 @@ npm install
 
 ### 2. Database Setup
 
-You can structure your MySQL database using either Prisma ORM or the pre-generated [schema.sql](file:///c:/Users/OM/Desktop/Projects/oodu-Hackthon/schema.sql) file.
+For local development, the application is pre-configured to use **SQLite** (a zero-setup database stored locally in your project folder as a file).
 
-**Option A: Setup via Prisma ORM**
 ```bash
 # Copy environment file
 cd backend
 cp .env.example .env
 
-# Edit .env with your MySQL connection string.
-# Ensure any '@' symbol in your password is URL-encoded as '%40'
-# Example: DATABASE_URL="mysql://b33_39246376:OM%40om123@sql308.byethost33.com:3306/b33_39246376_oodu"
-
-# Generate Prisma client
+# Generate Prisma client for SQLite
 npm run db:generate -- --schema=src/prisma/schema.prisma
 
-# Push schema directly to MySQL database
+# Sync the schema and create the local SQLite database file
 npx prisma db push --schema=src/prisma/schema.prisma
 
-# Seed database with mock data (including om@gmail.com ADMIN user)
+# Seed the database with mock data (including the om@gmail.com ADMIN user)
 npm run db:seed
 ```
 
@@ -201,7 +196,7 @@ Import the raw DDL table structure statements directly into your MySQL server (v
 
 **Backend `.env`:**
 ```env
-DATABASE_URL="mysql://b33_39246376:OM%40om123@sql308.byethost33.com:3306/b33_39246376_oodu"
+DATABASE_URL="file:./dev.db"
 JWT_SECRET=vadhvan-goes-port-super-secret-key-32-characters
 JWT_REFRESH_SECRET=vadhvan-goes-port-super-refresh-key-32-characters
 PORT=5000

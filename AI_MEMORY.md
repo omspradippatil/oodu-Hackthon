@@ -22,7 +22,7 @@
 ```
 oodu-Hackthon/
 ├── frontend/          ← React 19 + TypeScript + Vite + Tailwind + Shadcn
-├── backend/           ← Node.js + Express + TypeScript + Prisma + MySQL
+├── backend/           ← Node.js + Express + TypeScript + Prisma + SQLite (Local) / MySQL (Prod)
 ├── Design/            ← Reference UI designs (DO NOT MODIFY)
 ├── AI_MEMORY.md       ← This file (read first every session)
 ├── README.md          ← Full project documentation
@@ -46,7 +46,7 @@ oodu-Hackthon/
 - Node.js + Express.js + TypeScript
 - JWT Authentication: accessToken (15min) + refreshToken (7d, httpOnly cookie)
 - Bcrypt (12 rounds), Helmet, CORS, Morgan, Compression
-- Prisma ORM → MySQL (compatible with sql308.byethost33.com)
+- Prisma ORM → SQLite (Local dev) / MySQL (Production compatibility)
 - Server-Sent Events (SSE) for real-time updates via sseManager
 - Rate limiting (100/15min general, 10/15min auth)
 - Zod validation on all inputs

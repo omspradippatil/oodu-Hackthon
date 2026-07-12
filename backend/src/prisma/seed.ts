@@ -387,7 +387,7 @@ async function main() {
   // ─── Rail Tracks ─────────────────────────────────────────────────────────
   await Promise.all([
     prisma.railTrack.upsert({ where: { trackNumber: 'RT-01' }, update: {}, create: { trackNumber: 'RT-01', status: 'AVAILABLE', capacity: 20, destination: 'Ahmedabad Junction' } }),
-    prisma.railTrack.upsert({ where: { trackNumber: 'RT-02' }, update: {}, create: { trackNumber: 'RT-02', status: 'OCCUPIED', capacity: 30, destination: 'Surat Railway Station', departureTime: new Date('2026-07-13T06:00:00Z'), containerIds: [containers[2].id, containers[4].id] } }),
+    prisma.railTrack.upsert({ where: { trackNumber: 'RT-02' }, update: {}, create: { trackNumber: 'RT-02', status: 'OCCUPIED', capacity: 30, destination: 'Surat Railway Station', departureTime: new Date('2026-07-13T06:00:00Z'), containerIds: JSON.stringify([containers[2].id, containers[4].id]) } }),
     prisma.railTrack.upsert({ where: { trackNumber: 'RT-03' }, update: {}, create: { trackNumber: 'RT-03', status: 'MAINTENANCE', capacity: 25, destination: 'Mumbai CSMT' } }),
   ]);
   console.log('✅ Created 3 rail tracks');
@@ -591,12 +591,12 @@ async function main() {
       orgName: 'Vadhvan GOES Port',
       theme: 'light',
       language: 'en',
-      notificationPrefs: {
+      notificationPrefs: JSON.stringify({
         emailAlerts: true,
         smsAlerts: false,
         criticalOnly: false,
         maintenanceReminders: true,
-      },
+      }),
     },
   });
   console.log('✅ Created settings');

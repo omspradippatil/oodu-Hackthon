@@ -6,157 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
-}
-
-// ─── Enums ───────────────────────────────────────────────────────────────────
-
-enum UserRole {
-  ADMIN
-  OPERATIONS_MANAGER
-  FLEET_MANAGER
-  MAINTENANCE_SUPERVISOR
-  DRIVER
-}
-
-enum UserStatus {
-  ACTIVE
-  INACTIVE
-}
-
-enum VehicleType {
-  TRUCK
-  TRAILER
-  FORKLIFT
-  REACH_STACKER
-  CRANE_TRUCK
-}
-
-enum VehicleStatus {
-  AVAILABLE
-  ON_TRIP
-  IN_SHOP
-  RETIRED
-}
-
-enum DriverStatus {
-  AVAILABLE
-  ON_TRIP
-  OFF_DUTY
-  SUSPENDED
-}
-
-enum ShipPriority {
-  LOW
-  MEDIUM
-  HIGH
-  CRITICAL
-}
-
-enum ShipStatus {
-  WAITING
-  DOCKED
-  LOADING
-  UNLOADING
-  COMPLETED
-  DEPARTED
-}
-
-enum DockStatus {
-  AVAILABLE
-  OCCUPIED
-  MAINTENANCE
-}
-
-enum RailTrackStatus {
-  AVAILABLE
-  OCCUPIED
-  MAINTENANCE
-}
-
-enum ContainerPriority {
-  LOW
-  MEDIUM
-  HIGH
-  CRITICAL
-}
-
-enum ContainerStatus {
-  WAITING
-  ALLOCATED
-  LOADING
-  IN_TRANSIT
-  DELIVERED
-  CANCELLED
-}
-
-enum ContainerRequestStatus {
-  PENDING
-  ASSIGNED
-  DISPATCHED
-  COMPLETED
-  CANCELLED
-}
-
-enum EquipmentType {
-  CRANE
-  FORKLIFT
-  REACH_STACKER
-  TRAILER
-  MATERIAL_HANDLER
-}
-
-enum EquipmentStatus {
-  AVAILABLE
-  BUSY
-  MAINTENANCE
-  OFFLINE
-}
-
-enum TripStatus {
-  DRAFT
-  APPROVED
-  DISPATCHED
-  LOADING
-  IN_TRANSIT
-  DELIVERED
-  COMPLETED
-  CANCELLED
-}
-
-enum TripPriority {
-  LOW
-  MEDIUM
-  HIGH
-  CRITICAL
-}
-
-enum MaintenanceType {
-  OIL_CHANGE
-  INSPECTION
-  TYRE_REPLACEMENT
-  BRAKE_SERVICE
-  ENGINE_SERVICE
-  REPAIR
-  SCHEDULED
-  EMERGENCY
-}
-
-enum MaintenanceStatus {
-  OPEN
-  IN_PROGRESS
-  COMPLETED
-}
-
-enum ExpenseType {
-  MAINTENANCE
-  FUEL
-  TOLL
-  PARKING
-  INSURANCE
-  REPAIR
-  OTHER
 }
 
 // ─── Models ──────────────────────────────────────────────────────────────────
@@ -166,8 +17,8 @@ model User {
   email        String     @unique
   passwordHash String
   name         String
-  role         UserRole   @default(DRIVER)
-  status       UserStatus @default(ACTIVE)
+  role         String     @default("DRIVER")
+  status       String     @default("ACTIVE")
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
@@ -186,8 +37,8 @@ model Vehicle {
   registrationNo String        @unique
   name           String
   model          String
-  type           VehicleType
-  status         VehicleStatus @default(AVAILABLE)
+  type           String
+  status         String        @default("AVAILABLE")
   maxCapacity    Float
   odometer       Float         @default(0)
   fuelLevel      Float         @default(100)
@@ -222,7 +73,7 @@ model Driver {
   emergencyContact String?
   safetyScore      Int          @default(100)
   experienceYears  Int          @default(0)
-  status           DriverStatus @default(AVAILABLE)
+  status           String       @default("AVAILABLE")
   vehicleId        String?      @unique
   userId           String?
   createdAt        DateTime     @default(now())
@@ -246,12 +97,12 @@ model Ship {
   expectedDeparture DateTime?
   dockId           String?
   containerCount   Int          @default(0)
-  priority         ShipPriority @default(MEDIUM)
+  priority         String       @default("MEDIUM")
   cargoType        String
   shipLength       Float?
   shipWidth        Float?
   draft            Float?
-  status           ShipStatus   @default(WAITING)
+  status           String       @default("WAITING")
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
 
@@ -267,7 +118,7 @@ model Ship {
 model Dock {
   id                  String     @id @default(cuid())
   dockNumber          String     @unique
-  status              DockStatus @default(AVAILABLE)
+  status              String     @default("AVAILABLE")
   assignedShipId      String?    @unique
   assignedCraneId     String?
   containerCount      Int        @default(0)
@@ -306,11 +157,11 @@ model Warehouse {
 model RailTrack {
   id            String          @id @default(cuid())
   trackNumber   String          @unique
-  status        RailTrackStatus @default(AVAILABLE)
+  status        String          @default("AVAILABLE")
   capacity      Int
   destination   String?
   departureTime DateTime?
-  containerIds  Json            @default("[]")
+  containerIds  String          @default("[]")
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 
@@ -323,8 +174,8 @@ model Container {
   id            String            @id @default(cuid())
   containerCode String            @unique
   weight        Float
-  priority      ContainerPriority @default(MEDIUM)
-  status        ContainerStatus
+  priority      String            @default("MEDIUM")
+  status        String
   sourceDockId  String?
   destWarehouseId String?
   shipId        String?
@@ -350,7 +201,7 @@ model ContainerRequest {
   requestedBy String
   vehicleId   String?
   driverId    String?
-  status      ContainerRequestStatus @default(PENDING)
+  status      String                 @default("PENDING")
   notes       String?
   createdAt   DateTime               @default(now())
   updatedAt   DateTime               @updatedAt
@@ -366,8 +217,8 @@ model Equipment {
   id              String          @id @default(cuid())
   name            String
   equipmentNumber String          @unique
-  type            EquipmentType
-  status          EquipmentStatus @default(AVAILABLE)
+  type            String
+  status          String          @default("AVAILABLE")
   healthScore     Int             @default(100)
   maintenanceDue  DateTime?
   assignedDockId  String?
@@ -394,8 +245,8 @@ model Trip {
   cargoWeight     Float
   plannedDistance Float?
   estimatedTime   Int?
-  status          TripStatus   @default(DRAFT)
-  priority        TripPriority @default(MEDIUM)
+  status          String       @default("DRAFT")
+  priority        String       @default("MEDIUM")
   notes           String?
   dispatchedAt    DateTime?
   completedAt     DateTime?
@@ -421,11 +272,11 @@ model MaintenanceLogs {
   id             String            @id @default(cuid())
   vehicleId      String?
   equipmentId    String?
-  type           MaintenanceType
+  type           String
   description    String
   technicianName String?
   cost           Float             @default(0)
-  status         MaintenanceStatus @default(OPEN)
+  status         String            @default("OPEN")
   scheduledAt    DateTime?
   completedAt    DateTime?
   createdAt      DateTime          @default(now())
@@ -468,7 +319,7 @@ model Expense {
   id          String      @id @default(cuid())
   tripId      String?
   vehicleId   String
-  type        ExpenseType
+  type        String
   amount      Float
   description String?
   createdAt   DateTime    @default(now())
@@ -521,8 +372,8 @@ model AuditLog {
   action    String
   tableName String
   recordId  String
-  oldValues Json?
-  newValues Json?
+  oldValues String?
+  newValues String?
   createdAt DateTime @default(now())
 
   user User? @relation(fields: [userId], references: [id])
@@ -554,7 +405,7 @@ model Settings {
   orgName           String   @default("Vadhvan Port")
   theme             String   @default("light")
   language          String   @default("en")
-  notificationPrefs Json     @default("{}")
+  notificationPrefs String   @default("{}")
   updatedAt         DateTime @updatedAt
 
   @@map("settings")
