@@ -1,0 +1,68 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: vadhvan_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-vadhvan}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-vadhvan_secret}
+      POSTGRES_DB: ${DB_NAME:-vadhvan_port}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-vadhvan}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: vadhvan_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-vadhvan}:${DB_PASSWORD:-vadhvan_secret}@postgres:5432/${DB_NAME:-vadhvan_port}
+      JWT_SECRET: ${JWT_SECRET:-changeme_jwt_secret_32_chars_minimum}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-changeme_refresh_secret_32_chars}
+      PORT: 5000
+      NODE_ENV: ${NODE_ENV:-production}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:5173,http://localhost:80}
+      BCRYPT_ROUNDS: ${BCRYPT_ROUNDS:-12}
+      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN:-}
+      CLOUDFLARE_ACCOUNT_ID: ${CLOUDFLARE_ACCOUNT_ID:-}
+      CLOUDFLARE_WORKER_URL: ${CLOUDFLARE_WORKER_URL:-}
+    ports:
+      - "5000:5000"
+    volumes:
+      - backend_uploads:/app/uploads
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:5000/api}
+        VITE_SSE_URL: ${VITE_SSE_URL:-http://localhost:5000/api/events}
+    container_name: vadhvan_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  postgres_data:
+  backend_uploads:
