@@ -23,6 +23,7 @@ import ReportsPage from './pages/reports/ReportsPage';
 import AnalyticsPage from './pages/analytics/AnalyticsPage';
 import NotificationsPage from './pages/notifications/NotificationsPage';
 import SettingsPage from './pages/settings/SettingsPage';
+import LiveUpdatesPage from './pages/live-updates/LiveUpdatesPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -89,6 +90,7 @@ function App() {
                 <Route path="analytics" element={<AnalyticsPage />} />
                 <Route path="notifications" element={<NotificationsPage />} />
                 <Route path="settings" element={<SettingsPage />} />
+                <Route path="live-updates" element={<LiveUpdatesPage />} />
               </Route>
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>

@@ -23,6 +23,7 @@ import {
   Command,
   CircleGauge,
   DollarSign,
+  Activity,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSSE } from '@/contexts/SSEContext';
@@ -53,6 +54,7 @@ const navItems: NavItem[] = [
   { path: '/analytics', label: 'Analytics', icon: <BarChart3 size={20} /> },
   { path: '/expenses', label: 'Expenses', icon: <DollarSign size={20} /> },
   { path: '/notifications', label: 'Notifications', icon: <Bell size={20} /> },
+  { path: '/live-updates', label: 'Live Updates', icon: <Activity size={20} /> },
   { path: '/settings', label: 'Settings', icon: <Settings size={20} /> },
 ];
 
