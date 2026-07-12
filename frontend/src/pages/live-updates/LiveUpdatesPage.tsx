@@ -5,11 +5,12 @@ import {
   AlertCircle, Navigation, Container, ArrowRight, Zap, Radio, Eye
 } from 'lucide-react';
 
-// ─── Port layout constants (relative % positions on the canvas) ──────────────
+// ─── Vadhvan Mega Port layout constants ──────────────
 const PORT_DOCKS = [
-  { id: 'D1', label: 'Berth-1 (Container)', x: 52, y: 42, type: 'container' },
-  { id: 'D2', label: 'Berth-2 (Multipurpose)', x: 52, y: 52, type: 'multi' },
-  { id: 'D3', label: 'Berth-3 (Coal)', x: 52, y: 62, type: 'coal' },
+  { id: 'D1', label: 'Mega Container Terminal-1', x: 52, y: 42, type: 'container' },
+  { id: 'D2', label: 'Mega Container Terminal-2', x: 52, y: 50, type: 'container' },
+  { id: 'D3', label: 'Multipurpose Berth-1', x: 52, y: 58, type: 'multi' },
+  { id: 'D4', label: 'Liquid Cargo Berth-1', x: 52, y: 66, type: 'coal' },
 ];
 
 const APPROACH_PATH = [
@@ -59,34 +60,39 @@ interface TruckState {
   visible: boolean;
 }
 
-// Phase durations in ms — fast enough to see full cycle clearly
+// Phase durations in ms — slower, majestic, realistic pace (~6.25 min cycle)
 const PHASE_DURATIONS: Record<string, number> = {
-  approaching: 22000,   // 22s — ship visibly steams toward port
-  turning: 6000,        // 6s  — quick turn animation
-  docking: 8000,        // 8s  — berth approach
-  unloading: 40000,     // 40s — main activity: trucks + containers
-  reloading: 20000,     // 20s — loading export
-  departing: 22000,     // 22s — ship heads back to sea
-  at_sea: 10000,        // 10s — brief pause before next cycle
+  approaching: 60000,   // 60s — massive ships take time to approach
+  turning: 20000,       // 20s — turning circle maneuver
+  docking: 25000,       // 25s — slow berth approach
+  unloading: 120000,    // 2 min — heavy unloading operations
+  reloading: 90000,     // 1.5 min — export loading
+  departing: 60000,     // 60s — heading back to sea
+  at_sea: 30000,        // 30s — spacing between cycles
 };
 
 const TOTAL_CYCLE = Object.values(PHASE_DURATIONS).reduce((a, b) => a + b, 0);
 
 const SHIPS_DATA: Omit<ShipState, 'phase' | 'phaseProgress' | 'pathPos' | 'x' | 'y' | 'cycleStartTime'>[] = [
   {
-    id: 's1', name: 'MV Vadhvan Star', imoNumber: 'IMO-9245671', cargoType: 'Containers',
-    containerCount: 120, containersLeft: 120, priority: 'CRITICAL',
-    dockId: 'D1', color: '#3B82F6', speed: 12,
+    id: 's1', name: 'Mumbai Maersk', imoNumber: 'IMO-9780471', cargoType: 'Ultra Large Container',
+    containerCount: 19038, containersLeft: 19038, priority: 'CRITICAL',
+    dockId: 'D1', color: '#3B82F6', speed: 22,
   },
   {
-    id: 's2', name: 'MV Railway', imoNumber: 'IMO-8812043', cargoType: 'Coal Bulk',
-    containerCount: 85, containersLeft: 85, priority: 'HIGH',
-    dockId: 'D3', color: '#F59E0B', speed: 10,
+    id: 's2', name: 'Nhava Sheva Express', imoNumber: 'IMO-9406738', cargoType: 'Containers',
+    containerCount: 8530, containersLeft: 8530, priority: 'HIGH',
+    dockId: 'D2', color: '#8B5CF6', speed: 19,
   },
   {
-    id: 's3', name: 'MV Gujarat Pride', imoNumber: 'IMO-7653210', cargoType: 'Multipurpose',
-    containerCount: 60, containersLeft: 60, priority: 'MEDIUM',
-    dockId: 'D2', color: '#10B981', speed: 11,
+    id: 's3', name: 'MSC India', imoNumber: 'IMO-9231248', cargoType: 'Containers/General',
+    containerCount: 6732, containersLeft: 6732, priority: 'MEDIUM',
+    dockId: 'D3', color: '#10B981', speed: 18,
+  },
+  {
+    id: 's4', name: 'SCI Mumbai', imoNumber: 'IMO-9419539', cargoType: 'Liquid Bulk',
+    containerCount: 4200, containersLeft: 4200, priority: 'HIGH',
+    dockId: 'D4', color: '#F59E0B', speed: 16,
   },
 ];
 

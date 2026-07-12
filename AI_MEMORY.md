@@ -554,14 +554,15 @@ Fully autonomous port simulation — no backend required. Runs entirely on the f
 ### Ships simulated:
 | Ship | IMO | Cargo | Berth | Color |
 |------|-----|-------|-------|-------|
-| MV Vadhvan Star | IMO-9245671 | Containers | Berth-1 (Container) | Blue |
-| MV Railway | IMO-8812043 | Coal Bulk | Berth-3 (Coal) | Amber |
-| MV Gujarat Pride | IMO-7653210 | Multipurpose | Berth-2 (Multi) | Green |
+| Mumbai Maersk | IMO-9780471 | Ultra Large Container | Mega Container Terminal-1 | Blue |
+| Nhava Sheva Express | IMO-9406738 | Containers | Mega Container Terminal-2 | Purple |
+| MSC India | IMO-9231248 | Containers/General | Multipurpose Berth-1 | Green |
+| SCI Mumbai | IMO-9419539 | Liquid Bulk | Liquid Cargo Berth-1 | Amber |
 
-### Phase cycle (~2.1 min total per ship, staggered so always one active):
+### Phase cycle (~6.75 min total per ship, staggered so always one active):
 ```
 approaching → turning → docking → unloading → reloading → departing → at_sea → [repeat]
-   22s           6s       8s        40s           20s          22s        10s
+   60s           20s       25s       120s          90s          60s        30s
 ```
 
 ### Map layout based on:
