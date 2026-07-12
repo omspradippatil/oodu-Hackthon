@@ -19,6 +19,7 @@ This is **not** a simple fleet management system. It is a **full-stack Port Oper
 - 🚂 Rail dispatch operations
 - 🔧 Maintenance & fuel management
 - 📊 Real-time analytics & reports
+- 🔴 **Live Updates** — Fully autonomous port simulation with animated ship lifecycle, trucks, and event log
 
 ---
 
@@ -108,6 +109,7 @@ oodu-Hackthon/
 │   │   │   ├── reports/               # Reports & Export
 │   │   │   ├── analytics/             # Analytics Dashboard
 │   │   │   ├── notifications/         # Notification Center
+│   │   │   ├── live-updates/          # ⭐ Live Port Simulation (autonomous, real-time)
 │   │   │   └── settings/              # Settings
 │   │   ├── contexts/                  # AuthContext, SSEContext
 │   │   ├── hooks/                     # Custom React hooks

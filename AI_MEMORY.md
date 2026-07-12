@@ -210,6 +210,7 @@ DockStatus: AVAILABLE | OCCUPIED | MAINTENANCE
 │   ├── reports/ReportsPage.tsx      ← Reports + CSV export
 │   ├── analytics/AnalyticsPage.tsx  ← Analytics charts
 │   ├── notifications/NotificationsPage.tsx ← Notification center
+│   ├── live-updates/LiveUpdatesPage.tsx  ← ⭐ Live Port Simulation (fully autonomous)
 │   └── settings/SettingsPage.tsx    ← Settings module
 ├── hooks/
 │   ├── useSSE.ts                    ← EventSource subscription
@@ -504,7 +505,7 @@ ALLOWED_ORIGINS=http://localhost:5173
 
 1. **Design**: ALL colors MUST use tailwind tokens from tailwind.config.js
 2. **No placeholders**: Every module fetches real data from API
-3. **MySQL only**: Never use SQLite or in-memory DBs
+3. **SQLite (local) / MySQL (prod)**: Use SQLite for local dev (`file:./dev.db`). Schema must stay MySQL-compatible — no scalar array types, no unsupported JSON columns — use `String` fields with JSON.stringify/parse wrappers instead
 4. **JWT**: Access 15min, Refresh 7d httpOnly cookie
 5. **Status Atomicity**: Vehicle + Driver status in Prisma $transaction
 6. **Role Guards**: Every sensitive API route has requireRole() middleware
@@ -531,10 +532,48 @@ Design/admin_dashboard_overview/  → Dashboard overview reference
 - Leaflet maps: use placeholder div if actual map integration causes issues
 - SSE: frontend EventSource must handle CORS (withCredentials)
 - Prisma schema path: prisma schema is in `backend/src/prisma/` not root
+- SQLite local dev: `DATABASE_URL="file:./dev.db"` in backend/.env
+- Password validation: min 4 chars (not 6) to support `om123`
+- `notificationPrefs` and `containerIds` stored as JSON strings in SQLite; parsed in service layer
 
 ### Next Session Priority
-1. Verify all pages compile and render
-2. Test login flow end-to-end
-3. Add Docker configuration
-4. GitHub Actions workflow
-5. Maps integration (Leaflet + OpenStreetMap)
+1. Test Live Updates page in browser — verify all 3 ships animate
+2. Keep backend running with SQLite (`npm run dev` in backend/)
+3. Start frontend with `npm run dev` in frontend/
+4. Login: om@gmail.com / om123
+
+---
+
+## ⭐ LIVE UPDATES PAGE (`/live-updates`)
+
+### File: `frontend/src/pages/live-updates/LiveUpdatesPage.tsx`
+
+### What it does:
+Fully autonomous port simulation — no backend required. Runs entirely on the frontend with `requestAnimationFrame`.
+
+### Ships simulated:
+| Ship | IMO | Cargo | Berth | Color |
+|------|-----|-------|-------|-------|
+| MV Vadhvan Star | IMO-9245671 | Containers | Berth-1 (Container) | Blue |
+| MV Railway | IMO-8812043 | Coal Bulk | Berth-3 (Coal) | Amber |
+| MV Gujarat Pride | IMO-7653210 | Multipurpose | Berth-2 (Multi) | Green |
+
+### Phase cycle (~2.1 min total per ship, staggered so always one active):
+```
+approaching → turning → docking → unloading → reloading → departing → at_sea → [repeat]
+   22s           6s       8s        40s           20s          22s        10s
+```
+
+### Map layout based on:
+`frontend/assets/page_10.jpg` — SAGARMALA TEFR Vadhvan Port recommended layout Phase 3
+- Approach Channel (280m wide)
+- Turning Circle (800m DIA)
+- Container Berths, Multipurpose Berths, Coal Berths
+- Container Terminal, Rail Dispatch
+
+### Key implementation details:
+- Uses `requestAnimationFrame` loop with elapsed time tracking
+- Ships offset by `(i / total) * TOTAL_CYCLE` ms so they're always in different phases
+- Trucks spawn randomly during `unloading`/`reloading` phases, animate to warehouse area
+- Live event log fills with phase transitions
+- Right panel shows per-ship progress bar + container count

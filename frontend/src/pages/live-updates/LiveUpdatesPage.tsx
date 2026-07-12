@@ -59,15 +59,15 @@ interface TruckState {
   visible: boolean;
 }
 
-// Phase durations in ms (scaled to fit 7-8 min cycle)
+// Phase durations in ms — fast enough to see full cycle clearly
 const PHASE_DURATIONS: Record<string, number> = {
-  approaching: 55000,   // 55s
-  turning: 15000,       // 15s
-  docking: 20000,       // 20s
-  unloading: 120000,    // 2 min
-  reloading: 60000,     // 1 min
-  departing: 55000,     // 55s
-  at_sea: 60000,        // 1 min between cycles
+  approaching: 22000,   // 22s — ship visibly steams toward port
+  turning: 6000,        // 6s  — quick turn animation
+  docking: 8000,        // 8s  — berth approach
+  unloading: 40000,     // 40s — main activity: trucks + containers
+  reloading: 20000,     // 20s — loading export
+  departing: 22000,     // 22s — ship heads back to sea
+  at_sea: 10000,        // 10s — brief pause before next cycle
 };
 
 const TOTAL_CYCLE = Object.values(PHASE_DURATIONS).reduce((a, b) => a + b, 0);
@@ -79,7 +79,7 @@ const SHIPS_DATA: Omit<ShipState, 'phase' | 'phaseProgress' | 'pathPos' | 'x' | 
     dockId: 'D1', color: '#3B82F6', speed: 12,
   },
   {
-    id: 's2', name: 'MV Surat Express', imoNumber: 'IMO-8812043', cargoType: 'Coal Bulk',
+    id: 's2', name: 'MV Railway', imoNumber: 'IMO-8812043', cargoType: 'Coal Bulk',
     containerCount: 85, containersLeft: 85, priority: 'HIGH',
     dockId: 'D3', color: '#F59E0B', speed: 10,
   },
