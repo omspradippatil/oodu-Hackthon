@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Vadhavan Port - Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#76d6d5",
+                        "surface-dim": "#d3dbe5",
+                        "on-tertiary-container": "#2f9696",
+                        "surface-bright": "#f7f9ff",
+                        "primary-fixed-dim": "#aec7f6",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#293139",
+                        "surface-container-highest": "#dbe3ee",
+                        "surface-container": "#e7eff9",
+                        "surface-container-high": "#e1e9f4",
+                        "on-surface-variant": "#44474e",
+                        "on-tertiary-fixed-variant": "#004f4f",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#002020",
+                        "outline-variant": "#c4c6cf",
+                        "secondary-container": "#dfe0e0",
+                        "surface-variant": "#dbe3ee",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#000d0d",
+                        "surface-tint": "#465f88",
+                        "on-primary-fixed": "#001b3d",
+                        "background": "#f7f9ff",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#141c24",
+                        "surface": "#f7f9ff",
+                        "tertiary-container": "#002626",
+                        "tertiary-fixed": "#93f2f2",
+                        "secondary": "#5d5f5f",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#d6e3ff",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-primary-fixed-variant": "#2d476f",
+                        "surface-container-low": "#edf4ff",
+                        "on-primary-container": "#708ab5",
+                        "secondary-fixed": "#e2e2e2",
+                        "on-secondary-container": "#616363",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#002147",
+                        "on-error": "#ffffff",
+                        "outline": "#74777f",
+                        "inverse-on-surface": "#eaf1fc",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "on-secondary-fixed-variant": "#454747",
+                        "primary": "#000a1e",
+                        "on-background": "#141c24",
+                        "inverse-primary": "#aec7f6"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "base": "4px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "gutter": "24px",
+                        "xxl": "48px",
+                        "container-max": "1440px",
+                        "lg": "24px",
+                        "sm": "8px"
+                    },
+                    fontFamily: {
+                        "label-md": ["Public Sans"],
+                        "headline-sm": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "headline-md": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "body-sm": ["Public Sans"],
+                        "title-lg": ["Public Sans"],
+                        "headline-lg-mobile": ["Public Sans"],
+                        "display-lg": ["Public Sans"],
+                        "headline-lg": ["Public Sans"]
+                    },
+                    fontSize: {
+                        "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }],
+                        "title-lg": ["18px", { lineHeight: "24px", fontWeight: "600" }],
+                        "headline-lg-mobile": ["28px", { lineHeight: "36px", fontWeight: "600" }],
+                        "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F5F7FA; overflow-x: hidden; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1; }
+        .card-shadow { box-shadow: 0px 4px 12px rgba(0, 33, 71, 0.05); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md flex flex-col min-h-screen pt-20 pb-20 md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 right-0 z-30 bg-surface dark:bg-primary border-b border-outline-variant dark:border-primary-container flex justify-between items-center w-full px-gutter h-20">
+<button aria-label="Open Menu" class="text-primary dark:text-primary-fixed md:hidden hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" id="menu-btn">
+<span class="material-symbols-outlined text-[24px]">menu</span>
+</button>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[28px] text-primary dark:text-primary-fixed icon-fill">anchor</span>
+<h1 class="text-title-lg font-title-lg font-bold tracking-tight text-primary dark:text-primary-fixed">VADHAVAN PORT</h1>
+</div>
+<button class="text-label-md font-label-md text-primary dark:text-primary-fixed hover:text-primary dark:hover:text-primary-fixed-dim transition-colors hidden md:block">
+            Admin Login
+        </button>
+<!-- Mobile spacing placeholder to balance the flex layout when menu is visible -->
+<div class="w-6 md:hidden"></div>
+</header>
+<!-- NavigationDrawer (Mobile Hidden by default, Desktop SideNav) -->
+<nav class="fixed left-0 top-0 h-full z-40 flex flex-col py-md bg-surface-container dark:bg-primary-container border-r border-outline-variant w-72 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out md:mt-20" id="side-nav">
+<div class="px-md mb-xl flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center overflow-hidden">
+<img alt="Project Manager Profile" class="w-full h-full object-cover" data-alt="A professional headshot of an engineering project manager in a hardhat, with a subtle maritime port background, sharp focus, corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwvujVU53-Y6mFrAzutcCnQW4W_e0PNtHM-L2yC9KDfNm5CYWvYF_IIQ6Lrjdzn5rfT9F8Ih0rFSt90SHIf-wzxcRVaKWwfbQs3mdHXudPPLU7xZsKv03cFRXLzYT20v2HdpmDBW1N6wRXqroKnoKJjS8FIecbpJ-WVXTT4Y-G046BknCK8oS6BSH7Xb0Qzb4xWm67VnleZeBz7rn5lWOfTb0ezn7XqBnHJV7NE04II1aPn7mGy_AQ"/>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed">Port Management</h2>
+<p class="text-label-md font-label-md text-on-surface-variant">Admin Console</p>
+</div>
+</div>
+<ul class="flex-1 space-y-2 px-sm">
+<li>
+<a aria-current="page" class="flex items-center gap-md px-md py-sm bg-primary dark:bg-primary-fixed text-on-primary dark:text-on-primary-fixed rounded-full mx-2 scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined icon-fill">dashboard</span>
+<span class="text-label-md font-label-md">Overview</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-on-primary-container hover:bg-surface-container-highest dark:hover:bg-primary rounded-full mx-2 hover:bg-surface-container-highest dark:hover:bg-primary transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-label-md font-label-md">Budget</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-on-primary-container hover:bg-surface-container-highest dark:hover:bg-primary rounded-full mx-2 hover:bg-surface-container-highest dark:hover:bg-primary transition-colors" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="text-label-md font-label-md">Milestones</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-on-primary-container hover:bg-surface-container-highest dark:hover:bg-primary rounded-full mx-2 hover:bg-surface-container-highest dark:hover:bg-primary transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-label-md font-label-md">Documents</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-on-primary-container hover:bg-surface-container-highest dark:hover:bg-primary rounded-full mx-2 hover:bg-surface-container-highest dark:hover:bg-primary transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-label-md font-label-md">Team</span>
+</a>
+</li>
+</ul>
+<button class="md:hidden absolute top-4 right-4 text-on-surface-variant" id="close-menu-btn">
+<span class="material-symbols-outlined">close</span>
+</button>
+</nav>
+<!-- Overlay for mobile menu -->
+<div class="fixed inset-0 bg-black/50 z-30 hidden md:hidden transition-opacity" id="menu-overlay"></div>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-container-max mx-auto px-md md:px-gutter md:ml-72 py-lg flex flex-col gap-lg overflow-x-hidden">
+<!-- Header Section -->
+<section class="flex flex-col gap-xs">
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-on-surface">Overview</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Phase 1 Real-time Tracking</p>
+</section>
+<!-- Summary Statistics Bento Grid -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-md">
+<!-- Progress Card -->
+<div class="col-span-2 md:col-span-1 bg-surface-container-lowest border border-outline-variant p-lg rounded-xl card-shadow flex flex-col justify-between">
+<div class="flex justify-between items-start mb-md">
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Overall Progress</span>
+<span class="material-symbols-outlined text-primary">monitoring</span>
+</div>
+<div>
+<span class="text-display-lg font-display-lg text-primary">34%</span>
+<div class="w-full bg-surface-container h-2 mt-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 34%;"></div>
+</div>
+<p class="text-body-sm font-body-sm text-secondary mt-2">On schedule</p>
+</div>
+</div>
+<!-- Budget Card -->
+<div class="col-span-2 md:col-span-1 bg-surface-container-lowest border border-outline-variant p-lg rounded-xl card-shadow flex flex-col justify-between">
+<div class="flex justify-between items-start mb-md">
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Budget Spent</span>
+<span class="material-symbols-outlined text-primary">account_balance</span>
+</div>
+<div>
+<span class="text-headline-md font-headline-md text-primary">₹14.2K Cr</span>
+<p class="text-body-sm font-body-sm text-secondary mt-1">of ₹38K Cr total</p>
+<div class="flex items-center gap-1 mt-2 text-on-tertiary-container text-label-md font-label-md">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+<span>Under budget by 2%</span>
+</div>
+</div>
+</div>
+<!-- Milestone Card -->
+<div class="col-span-1 md:col-span-1 bg-surface-container-lowest border border-outline-variant p-lg rounded-xl card-shadow flex flex-col justify-between">
+<div class="flex justify-between items-start mb-md">
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Next Milestone</span>
+</div>
+<div>
+<span class="text-headline-md font-headline-md text-primary">12</span>
+<p class="text-body-sm font-body-sm text-secondary">Days left</p>
+</div>
+</div>
+<!-- Risk Level Card -->
+<div class="col-span-1 md:col-span-1 bg-surface-container-lowest border border-outline-variant p-lg rounded-xl card-shadow flex flex-col justify-between">
+<div class="flex justify-between items-start mb-md">
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Risk Level</span>
+</div>
+<div>
+<span class="inline-flex items-center px-2 py-1 rounded bg-error-container text-on-error-container text-label-md font-label-md mb-2">
+<span class="material-symbols-outlined text-[14px] mr-1">warning</span> High
+                    </span>
+<p class="text-body-sm font-body-sm text-secondary">2 Critical Alerts</p>
+</div>
+</div>
+</section>
+<!-- Progress Chart (S-Curve Placeholder) -->
+<section class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl card-shadow">
+<h3 class="text-title-lg font-title-lg text-on-surface mb-md">Cumulative Progress (S-Curve)</h3>
+<div class="w-full h-48 bg-surface-container rounded flex items-center justify-center relative overflow-hidden">
+<p class="text-label-md font-label-md text-on-surface-variant z-10">Chart Visualization Area</p>
+<!-- Decorative grid to simulate a chart area -->
+<div class="absolute inset-0 bg-[linear-gradient(to_right,#E4E7EB_1px,transparent_1px),linear-gradient(to_bottom,#E4E7EB_1px,transparent_1px)] bg-[size:24px_24px] opacity-50"></div>
+<!-- Mock S-Curve SVG -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<path d="M 0,100 C 30,100 40,20 100,20" fill="none" stroke="#002147" stroke-dasharray="4" stroke-width="2"></path>
+<path d="M 0,100 C 35,95 50,30 100,0" fill="none" stroke="#2f9696" stroke-width="3"></path>
+</svg>
+</div>
+<div class="flex justify-center gap-md mt-sm">
+<div class="flex items-center gap-xs"><div class="w-3 h-3 rounded-full bg-primary-container"></div><span class="text-body-sm font-body-sm text-secondary">Planned</span></div>
+<div class="flex items-center gap-xs"><div class="w-3 h-3 rounded-full bg-on-tertiary-container"></div><span class="text-body-sm font-body-sm text-secondary">Actual</span></div>
+</div>
+</section>
+<!-- Critical Alerts -->
+<section>
+<h3 class="text-title-lg font-title-lg text-on-surface mb-sm">Critical Alerts</h3>
+<div class="space-y-sm">
+<div class="bg-error-container border-l-4 border-error p-md rounded-r-lg flex items-start gap-md">
+<span class="material-symbols-outlined text-error mt-0.5">error</span>
+<div>
+<h4 class="text-label-md font-label-md text-on-error-container">Dredging Delay</h4>
+<p class="text-body-sm font-body-sm text-on-error-container/80">Contractor Alpha reporting 3-day delay due to equipment failure. Potential impact on dependent milestone.</p>
+</div>
+</div>
+<div class="bg-surface-container-high border-l-4 border-outline p-md rounded-r-lg flex items-start gap-md">
+<span class="material-symbols-outlined text-on-surface-variant mt-0.5">info</span>
+<div>
+<h4 class="text-label-md font-label-md text-on-surface">Material Procurement Review</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Steel shipment pending quality assurance sign-off. ETA +2 days.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Upcoming Milestones (Data Table) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl card-shadow overflow-hidden mb-lg">
+<div class="p-md border-b border-outline-variant">
+<h3 class="text-title-lg font-title-lg text-on-surface">Upcoming Milestones</h3>
+</div>
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse min-w-[350px]">
+<thead>
+<tr class="bg-surface-bright border-b-2 border-primary text-label-md font-label-md text-on-surface-variant uppercase">
+<th class="p-sm pl-md w-1/2">Milestone</th>
+<th class="p-sm w-1/4">Date</th>
+<th class="p-sm pr-md w-1/4 text-right">Status</th>
+</tr>
+</thead>
+<tbody class="text-body-sm font-body-sm text-on-surface">
+<tr class="border-b border-outline-variant hover:bg-surface transition-colors">
+<td class="p-sm pl-md font-semibold">Breakwater Foundation</td>
+<td class="p-sm text-secondary">Oct 12</td>
+<td class="p-sm pr-md text-right">
+<span class="inline-flex items-center px-2 py-1 rounded bg-surface-container-high text-on-surface text-[10px] font-semibold">Pending</span>
+</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface transition-colors">
+<td class="p-sm pl-md font-semibold">Dredging Phase 1</td>
+<td class="p-sm text-secondary">Oct 15</td>
+<td class="p-sm pr-md text-right">
+<span class="inline-flex items-center px-2 py-1 rounded bg-error-container text-on-error-container text-[10px] font-semibold">At Risk</span>
+</td>
+</tr>
+<tr class="hover:bg-surface transition-colors">
+<td class="p-sm pl-md font-semibold">Reclamation Review</td>
+<td class="p-sm text-secondary">Oct 20</td>
+<td class="p-sm pr-md text-right">
+<span class="inline-flex items-center px-2 py-1 rounded bg-surface-container-low border border-tertiary-fixed-dim text-on-tertiary-container text-[10px] font-semibold">On Track</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 lg:hidden bg-surface dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-lg pb-safe">
+<a class="flex flex-col items-center justify-center bg-tertiary-container dark:bg-tertiary text-on-tertiary-container dark:text-on-tertiary rounded-xl px-3 py-1 scale-90 duration-150 active:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined icon-fill">analytics</span>
+<span class="text-label-sm font-label-sm text-[10px]">Metrics</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors active:bg-surface-container-high px-3 py-1" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-label-sm font-label-sm text-[10px]">Schedule</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors active:bg-surface-container-high px-3 py-1" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-label-sm font-label-sm text-[10px]">Costs</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors active:bg-surface-container-high px-3 py-1 relative" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="text-label-sm font-label-sm text-[10px]">Alerts</span>
+<!-- Notification Badge -->
+<span class="absolute top-1 right-2 w-2 h-2 bg-error rounded-full"></span>
+</a>
+</nav>
+<style>
+        /* Safe area padding for newer mobile devices */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .pb-safe {
+                padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+<script>
+        // Simple mobile menu toggle logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuBtn = document.getElementById('menu-btn');
+            const closeBtn = document.getElementById('close-menu-btn');
+            const sideNav = document.getElementById('side-nav');
+            const overlay = document.getElementById('menu-overlay');
+
+            function toggleMenu() {
+                const isClosed = sideNav.classList.contains('-translate-x-full');
+                if (isClosed) {
+                    sideNav.classList.remove('-translate-x-full');
+                    overlay.classList.remove('hidden');
+                    // Small delay to allow display:block to apply before opacity transition
+                    setTimeout(() => overlay.classList.add('opacity-100'), 10);
+                } else {
+                    sideNav.classList.add('-translate-x-full');
+                    overlay.classList.remove('opacity-100');
+                    setTimeout(() => overlay.classList.add('hidden'), 300);
+                }
+            }
+
+            menuBtn.addEventListener('click', toggleMenu);
+            closeBtn.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+        });
+    </script>
+</body></html>

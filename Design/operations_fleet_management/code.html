@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-background dark:bg-background" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fleet Management - PortSync</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#00050e",
+                        "inverse-primary": "#b5c8e3",
+                        "inverse-surface": "#2d3133",
+                        "surface-variant": "#e0e3e6",
+                        "background": "#f7f9fc",
+                        "surface-container-low": "#f2f4f7",
+                        "surface-tint": "#4e6077",
+                        "on-tertiary-container": "#009a50",
+                        "on-primary-fixed-variant": "#36485e",
+                        "surface-container-highest": "#e0e3e6",
+                        "tertiary-fixed-dim": "#61de8a",
+                        "on-tertiary-fixed": "#00210c",
+                        "on-primary-fixed": "#081d30",
+                        "on-secondary-container": "#efefff",
+                        "on-tertiary-fixed-variant": "#005228",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface": "#f7f9fc",
+                        "outline": "#74777d",
+                        "on-primary-container": "#7587a0",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#191c1e",
+                        "on-secondary-fixed": "#001355",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#2d5bff",
+                        "primary-container": "#0b1f33",
+                        "surface-bright": "#f7f9fc",
+                        "tertiary-container": "#00240e",
+                        "primary-fixed": "#d1e4ff",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#44474c",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#dde1ff",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#b8c3ff",
+                        "surface-dim": "#d8dadd",
+                        "surface-container": "#eceef1",
+                        "primary-fixed-dim": "#b5c8e3",
+                        "tertiary-fixed": "#7efba4",
+                        "inverse-on-surface": "#eff1f4",
+                        "on-secondary-fixed-variant": "#0035bd",
+                        "tertiary": "#000602",
+                        "outline-variant": "#c4c6cd",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e6e8eb",
+                        "on-surface": "#191c1e",
+                        "secondary": "#0040df"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "xl": "32px",
+                        "unit": "4px",
+                        "xs": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "gutter": "20px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "data-tabular": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "title-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "data-tabular": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+                        "title-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .table-row-hover {
+                @apply transition-colors hover:bg-surface-container hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] border-b border-surface-container-high;
+            }
+            .filter-chip {
+                @apply inline-flex items-center gap-xs px-sm py-1 border border-outline-variant rounded-full font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-colors cursor-pointer;
+            }
+        }
+    </style>
+</head>
+<body class="h-full antialiased text-on-background font-body-md text-body-md bg-background">
+<!-- TopNavBar -->
+<nav class="fixed top-0 right-0 left-0 md:left-[240px] z-30 flex justify-between items-center px-lg h-16 bg-surface-container-lowest shadow-sm border-b border-outline-variant">
+<div class="flex items-center gap-md">
+<span class="md:hidden font-headline-sm text-headline-sm font-black text-primary">PortSync</span>
+<div class="hidden md:flex gap-lg h-full">
+<a class="flex items-center h-full font-title-lg text-title-lg text-primary font-bold border-b-2 border-secondary pb-1" href="#">Command Center</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<!-- Search -->
+<div class="relative hidden sm:block focus-within:ring-2 focus-within:ring-secondary-container rounded-lg overflow-hidden transition-all duration-200 ease-in-out">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/70" style="font-variation-settings: 'FILL' 0;">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-0 text-body-sm w-64 focus:ring-0" placeholder="Search fleet..." type="text"/>
+</div>
+<div class="flex items-center gap-sm">
+<button class="p-2 text-on-surface-variant hover:text-secondary transition-colors rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-secondary transition-colors rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-secondary transition-colors rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">help</span>
+</button>
+<img alt="User Profile" class="w-8 h-8 rounded-full ml-sm object-cover border border-outline-variant" data-alt="A professional headshot of a logistics manager in a high-tech corporate environment. Bright, even lighting. Minimalist background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgBkckkcBwtu3JeYneDLe2ddtAi1-dlAJoPPInmCFJvZIiEtCZfyM2fbgOgViPAMczSXAnPpcCKXZ-ow9g89m2tO8xzzt6hhTmaFZuY0BlV-fvdUXVi-BIdZebBn1Y75AJm-4QvdD3u-trUIG6i98_5f2emxAZs3UgINYdeFT45JWddDY72uUDyEqaGBlZ2P1aw5EUFo2efPndPLZgCEY4lB4N1AcOr30gYuzrk-dBmcXksvG9mWLY"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full z-40 flex flex-col bg-primary-container shadow-md w-[240px] hidden md:flex transition-all duration-200 ease-in-out">
+<div class="p-lg flex items-center gap-sm border-b border-primary-container/20 bg-primary-container">
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-white">PortSync</h1>
+<p class="font-label-sm text-label-sm text-secondary-fixed opacity-80">Vadhvan Port ERP</p>
+</div>
+</div>
+<div class="px-md py-lg">
+<button class="w-full flex items-center justify-center gap-sm bg-secondary-container hover:bg-secondary text-white font-label-md text-label-md py-3 rounded-lg shadow-sm border-b border-black/20 transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+                New Operation
+            </button>
+</div>
+<nav class="flex-1 overflow-y-auto py-sm flex flex-col gap-1">
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-md border-l-4 border-secondary-container bg-surface-container-lowest/10 text-white font-bold py-3 px-4 font-body-md text-body-md transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">directions_boat</span>
+                Fleet Management
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">groups</span>
+                Drivers
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">inventory_2</span>
+                Container Operations
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">route</span>
+                Trip Management
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">conveyor_belt</span>
+                Equipment
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">build</span>
+                Maintenance
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">local_gas_station</span>
+                Fuel &amp; Expenses
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">analytics</span>
+                Analytics
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">description</span>
+                Reports
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto border-t border-primary-container/20 py-sm">
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">logout</span>
+                Log Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:pl-[240px] pt-16 min-h-screen bg-background">
+<div class="p-margin-mobile md:p-margin-desktop max-w-7xl mx-auto space-y-lg">
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-md">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-background">Fleet Status Board</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Real-time overview of port logistics vehicles.</p>
+</div>
+<div class="flex gap-sm">
+<button class="inline-flex items-center gap-sm px-4 py-2 border border-primary-container rounded-lg font-label-md text-label-md text-primary-container hover:bg-surface-container-low transition-colors shadow-[0_1px_0_rgba(11,31,51,0.1)]">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 0;">download</span>
+                        CSV Export
+                    </button>
+</div>
+</div>
+<!-- Data Table Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col">
+<!-- Toolbar -->
+<div class="p-md border-b border-outline-variant flex flex-col lg:flex-row justify-between items-start lg:items-center gap-md bg-surface-bright">
+<!-- Filters -->
+<div class="flex flex-wrap gap-sm items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mr-2">Filters:</span>
+<div class="filter-chip">
+                            Status: All
+                            <span class="material-symbols-outlined text-[14px]">arrow_drop_down</span>
+</div>
+<div class="filter-chip">
+                            Type: Heavy Duty
+                            <span class="material-symbols-outlined text-[14px]">arrow_drop_down</span>
+</div>
+<div class="filter-chip">
+                            Health: &gt; 80%
+                            <span class="material-symbols-outlined text-[14px]">arrow_drop_down</span>
+</div>
+</div>
+<!-- Table Search -->
+<div class="relative w-full lg:w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/70 text-[20px]" style="font-variation-settings: 'FILL' 0;">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-surface border border-outline-variant rounded-lg font-body-sm text-body-sm focus:border-secondary-container focus:ring-1 focus:ring-secondary-container transition-all" placeholder="Search Registration or Driver..." type="text"/>
+</div>
+</div>
+<!-- Table Container -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant font-label-md text-label-md text-on-surface-variant">
+<tr>
+<th class="px-md py-3 font-semibold w-12"></th>
+<th class="px-md py-3 font-semibold">Registration</th>
+<th class="px-md py-3 font-semibold">Type &amp; Capacity</th>
+<th class="px-md py-3 font-semibold">Assigned Driver</th>
+<th class="px-md py-3 font-semibold">Current Location</th>
+<th class="px-md py-3 font-semibold">Fuel</th>
+<th class="px-md py-3 font-semibold">Health</th>
+<th class="px-md py-3 font-semibold text-right">Status</th>
+<th class="px-md py-3 font-semibold w-10"></th>
+</tr>
+</thead>
+<tbody class="font-data-tabular text-data-tabular text-on-surface divide-y divide-surface-container-high bg-surface-container-lowest">
+<!-- Row 1 -->
+<tr class="table-row-hover group">
+<td class="px-md py-2">
+<img class="w-10 h-10 rounded-md object-cover border border-outline-variant" data-alt="A clean, modern heavy-duty commercial logistics truck parked in a well-lit port facility. High resolution, professional corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfB4UTQVqd_56FC4MPKp7-2bbezTai18BRvIWDM5VHjH5dWBKMW36c_N-IS-Wx-QpWyl4XRXuI-pYHyeygLZBbB4vuHJOiCTMdXOWpX1DMd7VLEccNXcAuGx749Y_LjaBssWVWZ99SfEYU71OrCiPwma7bv6533lqQai6XcZ8A57PunO0jnkYMawwhBH04lJP2El_d8qaAGH9NkCnUVp1ePGJ4U99_eYd6Rd_5lA3s8bgLZ9PcmOoU"/>
+</td>
+<td class="px-md py-3">
+<div class="font-medium text-on-background">VP-7724-MH</div>
+<div class="text-on-surface-variant text-[11px] mt-0.5">ID: TRK-042</div>
+</td>
+<td class="px-md py-3">
+<div>Flatbed Trailer</div>
+<div class="text-on-surface-variant text-[11px] mt-0.5">40 Tons</div>
+</td>
+<td class="px-md py-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center font-label-sm text-primary-container">AR</div>
+<span>Amit Sharma</span>
+</div>
+</td>
+<td class="px-md py-3">Terminal B - Gate 4</td>
+<td class="px-md py-3">
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-secondary-container h-full rounded-full" style="width: 78%"></div>
+</div>
+<span class="text-on-surface-variant text-[11px]">78%</span>
+</div>
+</td>
+<td class="px-md py-3">
+<div class="flex items-center gap-1 text-tertiary-fixed-dim">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="font-medium">92</span>
+</div>
+</td>
+<td class="px-md py-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-tertiary-fixed/20 text-on-tertiary-fixed-variant font-label-sm border border-tertiary-fixed/30">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim mr-1.5"></span>
+                                        On Trip
+                                    </span>
+</td>
+<td class="px-md py-3 text-right">
+<button class="text-outline hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="table-row-hover group">
+<td class="px-md py-2">
+<img class="w-10 h-10 rounded-md object-cover border border-outline-variant" data-alt="A specialized container handler vehicle operating in a modern logistics yard. Sunny day, crisp details, corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdkPFULqonAxWivGlEu-FFNvF-n4Qa4PNSSgBQyd-O50U5q934HYALMeU6x6ruL-e11bTpa6CYwkdguX4avChX9T6AyAs2LKO5-Ai1_Ym6Q0Z3H_5YWHBmh1l-5xO_qEaF9zVev2dZW-yYsjW7xe_MmKrx7mpkkH_4loljvpT6vVIb20z1fk17eq-dlA5WrGmP5efPu2UvUxuyLBa_zOZXmVFIrUqZ_aaFP0YpyKQfjTAdiRqaLkq7"/>
+</td>
+<td class="px-md py-3">
+<div class="font-medium text-on-background">VP-8109-GJ</div>
+<div class="text-on-surface-variant text-[11px] mt-0.5">ID: CH-011</div>
+</td>
+<td class="px-md py-3">
+<div>Reach Stacker</div>
+<div class="text-on-surface-variant text-[11px] mt-0.5">45 Tons</div>
+</td>
+<td class="px-md py-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center font-label-sm text-primary-container">PK</div>
+<span>Priya Kumar</span>
+</div>
+</td>
+<td class="px-md py-3">Yard Section 12</td>
+<td class="px-md py-3">
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-secondary-container h-full rounded-full" style="width: 45%"></div>
+</div>
+<span class="text-on-surface-variant text-[11px]">45%</span>
+</div>
+</td>
+<td class="px-md py-3">
+<div class="flex items-center gap-1 text-tertiary-fixed-dim">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="font-medium">88</span>
+</div>
+</td>
+<td class="px-md py-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm border border-outline-variant/30">
+<span class="w-1.5 h-1.5 rounded-full bg-outline mr-1.5"></span>
+                                        Available
+                                    </span>
+</td>
+<td class="px-md py-3 text-right">
+<button class="text-outline hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="table-row-hover group">
+<td class="px-md py-2">
+<img class="w-10 h-10 rounded-md object-cover border border-outline-variant opacity-70" data-alt="A modern utility transport van parked inside a large, clean port maintenance workshop. Industrial corporate aesthetic, bright lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu8-3irp8Cv-FNiqnE2pYyaMQqnRgJVELmbip675B-_dn1KgBeC3SCjus0iMBxw90EHlapkI4aKL0xxqtih61SNZ2LM2x-4AEFXPKrvSak7WPCBqq1rUqH0NpfdEQWLv1UjYxZSQ1gCQMRe46V2R-q78u3Tb_5mcWAhjPd9FFG1a7lKCTjUzdDJ6jmdxZoxvgV5q9i88cxakPHNat85M0zA9t_k0e101X39xOYEPl36PxLOO6IjZRt"/>
+</td>
+<td class="px-md py-3">
+<div class="font-medium text-on-background">VP-5521-MH</div>
+<div class="text-on-surface-variant text-[11px] mt-0.5">ID: VAN-089</div>
+</td>
+<td class="px-md py-3">
+<div>Utility Van</div>
+<div class="text-on-surface-variant text-[11px] mt-0.5">2 Tons</div>
+</td>
+<td class="px-md py-3">
+<span class="text-on-surface-variant italic text-[12px]">Unassigned</span>
+</td>
+<td class="px-md py-3">Workshop A</td>
+<td class="px-md py-3">
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 15%"></div>
+</div>
+<span class="text-error text-[11px]">15%</span>
+</div>
+</td>
+<td class="px-md py-3">
+<div class="flex items-center gap-1 text-error">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-medium">42</span>
+</div>
+</td>
+<td class="px-md py-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-error-container/50 text-on-error-container font-label-sm border border-error-container">
+<span class="material-symbols-outlined text-[12px] mr-1">build</span>
+                                        Maintenance
+                                    </span>
+</td>
+<td class="px-md py-3 text-right">
+<button class="text-outline hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="p-md border-t border-outline-variant bg-surface-bright flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant">
+<div>Showing 1 to 3 of 42 vehicles</div>
+<div class="flex gap-1">
+<button class="p-1 rounded hover:bg-surface-container-low disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded bg-secondary-container text-white flex items-center justify-center font-medium">1</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container-low flex items-center justify-center font-medium">2</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container-low flex items-center justify-center font-medium">3</button>
+<span class="w-8 h-8 flex items-center justify-center">...</span>
+<button class="p-1 rounded hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

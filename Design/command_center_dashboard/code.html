@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-background dark:bg-background" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Port Command Center - PortSync</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#00050e",
+                    "inverse-primary": "#b5c8e3",
+                    "inverse-surface": "#2d3133",
+                    "surface-variant": "#e0e3e6",
+                    "background": "#f7f9fc",
+                    "surface-container-low": "#f2f4f7",
+                    "surface-tint": "#4e6077",
+                    "on-tertiary-container": "#009a50",
+                    "on-primary-fixed-variant": "#36485e",
+                    "surface-container-highest": "#e0e3e6",
+                    "tertiary-fixed-dim": "#61de8a",
+                    "on-tertiary-fixed": "#00210c",
+                    "on-primary-fixed": "#081d30",
+                    "on-secondary-container": "#efefff",
+                    "on-tertiary-fixed-variant": "#005228",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface": "#f7f9fc",
+                    "outline": "#74777d",
+                    "on-primary-container": "#7587a0",
+                    "surface-container-lowest": "#ffffff",
+                    "on-background": "#191c1e",
+                    "on-secondary-fixed": "#001355",
+                    "on-secondary": "#ffffff",
+                    "secondary-container": "#2d5bff",
+                    "primary-container": "#0b1f33",
+                    "surface-bright": "#f7f9fc",
+                    "tertiary-container": "#00240e",
+                    "primary-fixed": "#d1e4ff",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#44474c",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#dde1ff",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#b8c3ff",
+                    "surface-dim": "#d8dadd",
+                    "surface-container": "#eceef1",
+                    "primary-fixed-dim": "#b5c8e3",
+                    "tertiary-fixed": "#7efba4",
+                    "inverse-on-surface": "#eff1f4",
+                    "on-secondary-fixed-variant": "#0035bd",
+                    "tertiary": "#000602",
+                    "outline-variant": "#c4c6cd",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#e6e8eb",
+                    "on-surface": "#191c1e",
+                    "secondary": "#0040df"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "xl": "32px",
+                    "unit": "4px",
+                    "xs": "4px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px",
+                    "sm": "8px",
+                    "lg": "24px",
+                    "gutter": "20px"
+            },
+            "fontFamily": {
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "headline-sm": [
+                            "Inter"
+                    ],
+                    "data-tabular": [
+                            "Inter"
+                    ],
+                    "label-sm": [
+                            "Inter"
+                    ],
+                    "title-lg": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-md": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.02em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-sm": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "data-tabular": [
+                            "13px",
+                            {
+                                    "lineHeight": "18px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "11px",
+                            {
+                                    "lineHeight": "14px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "title-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+</head>
+<body class="font-body-md text-on-surface bg-background flex h-full overflow-hidden">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full z-40 flex flex-col w-[240px] bg-primary-container dark:bg-primary-container text-secondary-fixed dark:text-secondary-fixed-dim shadow-md font-body-md text-body-md transition-all duration-200 ease-in-out">
+<div class="p-lg bg-primary-container">
+<div class="flex items-center gap-md">
+<img alt="Vadhvan Port Logo" class="h-10 w-10 object-contain rounded-md" data-alt="A modern, high-tech logo for an enterprise resource planning software called PortSync. The logo features a minimalist, geometric representation of a shipping container or crane, in stark white against a dark background, reflecting a sleek, corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7RErAN7QcjetH8TXOeTepu07oE6K5Juut-uo5yD7uBTqa5YjGWkLnb0ii8ZIg0uJ0tcHnhaMynu2NQTu4kzeNGbcwUg0n0S1xzs7T4rKQ6puS0DMVkidSEFs1y-OSCBS3GpD8Z1ZXAQMZbySB1AquPFEvvw8MC9FgTpwtSWhQFx4P3CSvTarWr6UXztWhpRNu5SKps3ninYYyg2PJEKJN2LATk2GuZo3rkjllweMmTGylZH3EUIqY"/>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-white leading-tight">PortSync</h1>
+<p class="font-label-sm text-label-sm text-on-primary-container/70 uppercase">Vadhvan Port ERP</p>
+</div>
+</div>
+</div>
+<div class="px-md mb-md">
+<button class="w-full bg-secondary-container text-on-secondary-container font-label-md text-label-md font-bold py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-secondary transition-colors shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+                New Operation
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto px-xs pb-lg space-y-1">
+<!-- Active Tab -->
+<a class="flex items-center gap-md border-l-4 border-secondary-container bg-surface-container-lowest/10 text-white font-bold py-3 px-4" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10" href="#">
+<span class="material-symbols-outlined">directions_boat</span>
+                Fleet Management
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10" href="#">
+<span class="material-symbols-outlined">groups</span>
+                Drivers
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                Container Operations
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10" href="#">
+<span class="material-symbols-outlined">route</span>
+                Trip Management
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10" href="#">
+<span class="material-symbols-outlined">conveyor_belt</span>
+                Equipment
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10" href="#">
+<span class="material-symbols-outlined">build</span>
+                Maintenance
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10" href="#">
+<span class="material-symbols-outlined">local_gas_station</span>
+                Fuel &amp; Expenses
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Analytics
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10" href="#">
+<span class="material-symbols-outlined">description</span>
+                Reports
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</div>
+<div class="px-xs py-md border-t border-on-primary-container/20">
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-md text-on-primary-container/70 hover:text-white py-3 px-4 transition-colors hover:bg-primary-fixed/10" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Log Out
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-[240px] flex flex-col h-full relative">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-[240px] z-30 flex justify-between items-center px-lg h-16 bg-surface-container-lowest dark:bg-surface text-primary dark:text-inverse-primary font-title-lg text-title-lg border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-lg">
+<!-- Navigation Links -->
+<nav class="flex items-center h-full">
+<a class="text-primary font-bold border-b-2 border-secondary pb-1 h-full flex items-center mt-1" href="#">Command Center</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<!-- Search -->
+<div class="relative focus-within:ring-2 focus-within:ring-secondary-container rounded-lg">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-body-sm font-body-sm focus:outline-none focus:border-secondary transition-colors w-64" placeholder="Search resources..." type="text"/>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-sm">
+<button class="p-2 text-on-surface-variant hover:text-secondary transition-colors rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-secondary transition-colors rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-secondary transition-colors rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<div class="w-px h-8 bg-outline-variant mx-2"></div>
+<!-- Profile -->
+<button class="flex items-center gap-sm hover:opacity-80 transition-opacity">
+<img alt="User Profile" class="h-8 w-8 rounded-full border border-outline-variant object-cover" data-alt="A small, circular avatar portrait of a professional operations manager in a well-lit, modern corporate setting, wearing a crisp shirt, facing forward with a neutral, focused expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD224UGWdyvU-Rv1878UF8KRmIcZcdhgJZHDRGLljdyx7ungEo7MnFsz_wYsQbEuxR_eglplE9a75Q5CtSjs0JBsj55GuTukY6OURkcQIN7Wd8hiL3rw-MwewJdFsTNYhqoYb_8nH8FrehofZrVfOM07qMbmBfzFSSbTm4bzaL81sDPPCOjR3pvez4rMX2axuaYG2n_tIO5fz95mGt6kss-JnuwZdifXMOx2RPskN5f4aa9VpalN6dP"/>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-y-auto mt-16 p-margin-desktop bg-background">
+<div class="max-w-[1600px] mx-auto space-y-lg">
+<!-- KPI Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-md">
+<!-- KPI Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0px_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0px_8px_16px_rgba(0,0,0,0.08)] hover:border-secondary/30 transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Active Vehicles</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+</div>
+<div class="font-display-lg text-display-lg text-on-surface">142</div>
+<div class="flex items-center gap-1 mt-1 text-on-tertiary-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+<span>12%</span>
+</div>
+</div>
+<!-- KPI Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0px_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0px_8px_16px_rgba(0,0,0,0.08)] hover:border-secondary/30 transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Vehicles Available</span>
+<span class="material-symbols-outlined text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="font-display-lg text-display-lg text-on-surface">38</div>
+</div>
+<!-- KPI Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0px_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0px_8px_16px_rgba(0,0,0,0.08)] hover:border-secondary/30 transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Vehicles On Trip</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">route</span>
+</div>
+<div class="font-display-lg text-display-lg text-on-surface">89</div>
+</div>
+<!-- KPI Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0px_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0px_8px_16px_rgba(0,0,0,0.08)] hover:border-secondary/30 transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Drivers On Duty</span>
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">engineering</span>
+</div>
+<div class="font-display-lg text-display-lg text-on-surface">156</div>
+</div>
+<!-- KPI Card 5 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0px_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0px_8px_16px_rgba(0,0,0,0.08)] hover:border-secondary/30 transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Fleet Utilization</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">pie_chart</span>
+</div>
+<div class="font-display-lg text-display-lg text-on-surface">82<span class="text-headline-md">%</span></div>
+</div>
+<!-- KPI Card 6 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0px_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0px_8px_16px_rgba(0,0,0,0.08)] hover:border-secondary/30 transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Active Requests</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">assignment</span>
+</div>
+<div class="font-display-lg text-display-lg text-on-surface">45</div>
+</div>
+<!-- KPI Card 7 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0px_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0px_8px_16px_rgba(0,0,0,0.08)] hover:border-secondary/30 transition-all relative overflow-hidden">
+<div class="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[80px]" style="font-variation-settings: 'FILL' 1;">monitor_heart</span>
+</div>
+<div class="flex justify-between items-start mb-2 relative z-10">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Port Health</span>
+<span class="material-symbols-outlined text-on-tertiary-container" style="font-variation-settings: 'FILL' 1;">health_and_safety</span>
+</div>
+<div class="font-display-lg text-display-lg text-on-tertiary-container relative z-10">98<span class="text-headline-md">%</span></div>
+</div>
+</div>
+<!-- Main Layout Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+<!-- Center Column: Workflow -->
+<div class="xl:col-span-8 space-y-lg">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] overflow-hidden">
+<div class="px-lg py-md border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<h2 class="font-headline-sm text-headline-sm font-semibold text-on-surface">Port Resource Synchronization</h2>
+<button class="px-3 py-1.5 border border-secondary-container text-secondary-container rounded-lg font-label-md text-label-md hover:bg-secondary-container/5 transition-colors">View Details</button>
+</div>
+<!-- Visual Workflow Canvas -->
+<div class="p-lg bg-surface-container-lowest relative min-h-[400px] flex items-center justify-center">
+<!-- Abstract lines connecting nodes -->
+<div class="absolute inset-0 pointer-events-none p-lg opacity-20">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 300">
+<path class="animate-[dash_20s_linear_infinite]" d="M 100 150 L 300 150 L 500 50 L 700 150 L 900 150" fill="none" stroke="#2d5bff" stroke-dasharray="5,5" stroke-width="2"></path>
+<path d="M 300 150 L 500 250 L 700 150" fill="none" stroke="#2d5bff" stroke-dasharray="5,5" stroke-width="2"></path>
+</svg>
+</div>
+<style>
+                                    @keyframes dash {
+                                      to {
+                                        stroke-dashoffset: -1000;
+                                      }
+                                    }
+                                </style>
+<!-- Nodes Grid (Bento style arrangement) -->
+<div class="grid grid-cols-5 gap-md w-full relative z-10">
+<!-- Request Phase -->
+<div class="col-span-1 flex flex-col items-center gap-sm">
+<div class="w-16 h-16 rounded-xl bg-surface-container border border-outline-variant flex items-center justify-center shadow-sm relative group cursor-pointer hover:border-secondary transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-secondary">add_task</span>
+<div class="absolute -top-2 -right-2 w-5 h-5 bg-tertiary-fixed-dim rounded-full border-2 border-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px] text-tertiary-container font-bold">check</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-center text-on-surface">Request</span>
+</div>
+<!-- Checks Phase -->
+<div class="col-span-1 flex flex-col gap-sm justify-center relative">
+<!-- Connector Line pseudo-element (handled by SVG mainly, but visual aid here) -->
+<div class="absolute left-[-20%] top-1/2 w-[40%] h-px bg-outline-variant -z-10"></div>
+<div class="absolute right-[-20%] top-1/2 w-[40%] h-px bg-outline-variant -z-10"></div>
+<div class="bg-surface-container rounded-lg p-2 border border-outline-variant text-center cursor-pointer hover:border-secondary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">precision_manufacturing</span>
+<span class="font-label-sm text-label-sm">Cranes</span>
+</div>
+<div class="bg-surface-container rounded-lg p-2 border border-outline-variant text-center cursor-pointer hover:border-secondary transition-colors flex items-center justify-center gap-2 border-l-4 border-l-secondary-container">
+<span class="material-symbols-outlined text-[16px] text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span class="font-label-sm text-label-sm font-bold">Vehicles (12)</span>
+</div>
+<div class="bg-surface-container rounded-lg p-2 border border-outline-variant text-center cursor-pointer hover:border-secondary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">badge</span>
+<span class="font-label-sm text-label-sm">Drivers</span>
+</div>
+</div>
+<!-- Recommendation/Dispatch -->
+<div class="col-span-1 flex flex-col items-center gap-sm justify-center">
+<div class="w-20 h-20 rounded-full bg-secondary-container/10 border-2 border-secondary-container flex items-center justify-center shadow-[0_0_15px_rgba(45,91,255,0.2)] relative cursor-pointer hover:bg-secondary-container/20 transition-all">
+<span class="material-symbols-outlined text-secondary-container text-display-lg" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<span class="font-label-md text-label-md text-center text-on-surface font-bold">Recommend &amp;<br/>Dispatch</span>
+</div>
+<!-- Execution Phase -->
+<div class="col-span-1 flex flex-col gap-sm justify-center relative">
+<div class="absolute left-[-20%] top-1/2 w-[40%] h-px bg-outline-variant -z-10"></div>
+<div class="absolute right-[-20%] top-1/2 w-[40%] h-px bg-outline-variant -z-10"></div>
+<div class="bg-surface-container rounded-lg p-2 border border-outline-variant text-center cursor-pointer hover:border-secondary transition-colors flex justify-between items-center px-3">
+<span class="font-label-sm text-label-sm">Loading</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed-dim">check_circle</span>
+</div>
+<div class="bg-surface-container rounded-lg p-2 border border-secondary-container text-center cursor-pointer flex justify-between items-center px-3 shadow-[0_0_8px_rgba(45,91,255,0.1)]">
+<span class="font-label-sm text-label-sm font-bold text-secondary-container">In Transit</span>
+<div class="w-4 h-4 rounded-full border-2 border-secondary-container border-t-transparent animate-spin"></div>
+</div>
+<div class="bg-surface-container rounded-lg p-2 border border-outline-variant text-center opacity-50 cursor-not-allowed flex justify-between items-center px-3">
+<span class="font-label-sm text-label-sm">Delivered</span>
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+</div>
+</div>
+<!-- End Phase -->
+<div class="col-span-1 flex flex-col items-center gap-sm justify-center">
+<div class="w-16 h-16 rounded-xl bg-surface-container border border-outline-variant flex items-center justify-center opacity-50 relative">
+<span class="material-symbols-outlined text-on-surface-variant">inventory</span>
+</div>
+<span class="font-label-md text-label-md text-center text-on-surface-variant">Complete</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Operations Panel -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] p-lg">
+<h3 class="font-title-lg text-title-lg font-semibold text-on-surface mb-md">Operations Panel</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-md">
+<!-- Op Stat 1 -->
+<div class="bg-surface border border-outline-variant rounded-lg p-md">
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Cranes (Free/Busy)</div>
+<div class="flex items-end gap-2">
+<span class="font-headline-md text-headline-md text-tertiary-fixed-dim font-bold">4</span>
+<span class="text-outline">/</span>
+<span class="font-title-lg text-title-lg text-on-surface">12</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-tertiary-fixed-dim h-full" style="width: 25%"></div>
+</div>
+</div>
+<!-- Op Stat 2 -->
+<div class="bg-surface border border-outline-variant rounded-lg p-md">
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Dock Occupancy</div>
+<div class="flex items-end gap-2">
+<span class="font-headline-md text-headline-md text-secondary-container font-bold">85%</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-secondary-container h-full" style="width: 85%"></div>
+</div>
+</div>
+<!-- Op Stat 3 -->
+<div class="bg-surface border border-outline-variant rounded-lg p-md">
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Container Queue</div>
+<div class="flex items-end gap-2">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">245</span>
+<span class="text-label-sm text-on-surface-variant mb-1">TEU</span>
+</div>
+</div>
+<!-- Op Stat 4 -->
+<div class="bg-surface border border-outline-variant rounded-lg p-md">
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Truck Queue</div>
+<div class="flex items-end gap-2">
+<span class="font-headline-md text-headline-md text-error font-bold">18</span>
+<span class="text-label-sm text-on-surface-variant mb-1">Wait: 45m</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Live Alerts & Map -->
+<div class="xl:col-span-4 space-y-lg flex flex-col h-full">
+<!-- Mini Map/Tracker -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] overflow-hidden h-[250px] relative">
+<!-- Using background image map placeholder -->
+<div class="absolute inset-0 bg-cover bg-center opacity-80" data-alt="A stylized, minimalist digital map of a modern port terminal, rendered in a cool, enterprise color palette with deep blues and crisp whites. The map shows geometric outlines of docks, roads, and storage yards, with subtle glowing dots indicating active vehicles or cranes." data-location="Vadhvan Port" style="background-image: url('https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg')"></div>
+<div class="absolute inset-0 bg-gradient-to-b from-primary-container/20 to-primary-container/60 pointer-events-none"></div>
+<div class="absolute top-md left-md right-md flex justify-between items-center z-10">
+<span class="bg-surface-container-lowest/90 backdrop-blur-sm px-3 py-1 rounded-full font-label-sm text-label-sm font-bold border border-outline-variant flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim animate-pulse"></span>
+                                    Live Terminal Map
+                                </span>
+<button class="bg-surface-container-lowest/90 p-1.5 rounded-lg hover:bg-surface-container-lowest transition-colors border border-outline-variant">
+<span class="material-symbols-outlined text-[18px]">fullscreen</span>
+</button>
+</div>
+<!-- Fake map markers -->
+<div class="absolute top-1/2 left-1/3 w-3 h-3 bg-secondary-container rounded-full border-2 border-white shadow-sm z-10"></div>
+<div class="absolute top-1/3 left-2/3 w-3 h-3 bg-secondary-container rounded-full border-2 border-white shadow-sm z-10"></div>
+<div class="absolute bottom-1/3 right-1/4 w-3 h-3 bg-error rounded-full border-2 border-white shadow-sm z-10 animate-bounce"></div>
+</div>
+<!-- Live Alerts Sidebar -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex-1 flex flex-col">
+<div class="px-lg py-md border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error">warning</span>
+<h3 class="font-headline-sm text-headline-sm font-semibold text-on-surface">Live Alerts</h3>
+</div>
+<span class="bg-error-container text-on-error-container font-label-sm text-label-sm px-2 py-0.5 rounded-full font-bold">3 New</span>
+</div>
+<div class="p-md space-y-md overflow-y-auto max-h-[400px]">
+<!-- Alert 1 -->
+<div class="flex gap-md p-3 border border-error-container bg-error-container/10 rounded-lg">
+<div class="mt-1">
+<span class="material-symbols-outlined text-error text-[20px]">build_circle</span>
+</div>
+<div>
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-md text-label-md font-bold text-on-surface">Equipment Failure</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">2m ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Crane C-04 reporting hydraulic pressure loss. Maintenance team dispatched.</p>
+</div>
+</div>
+<!-- Alert 2 -->
+<div class="flex gap-md p-3 border border-outline-variant rounded-lg hover:bg-surface-container transition-colors">
+<div class="mt-1">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">schedule</span>
+</div>
+<div>
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-md text-label-md font-bold text-on-surface">Delayed Trip</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">15m ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Trip TR-892 delayed at Gate 3 due to documentation mismatch.</p>
+</div>
+</div>
+<!-- Alert 3 -->
+<div class="flex gap-md p-3 border border-outline-variant rounded-lg hover:bg-surface-container transition-colors">
+<div class="mt-1">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">settings_suggest</span>
+</div>
+<div>
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-md text-label-md font-bold text-on-surface">Maintenance Due</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">1h ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Vehicle V-102 scheduled for routine oil change and brake inspection.</p>
+</div>
+</div>
+<button class="w-full py-2 text-center text-secondary-container font-label-md text-label-md hover:bg-secondary-container/5 rounded-lg transition-colors">
+                                    View All Alerts
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

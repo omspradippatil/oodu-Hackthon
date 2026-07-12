@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vadhavan Port - Public Portal</title>
+<!-- Google Fonts: Public Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#76d6d5",
+                        "surface-dim": "#d3dbe5",
+                        "on-tertiary-container": "#2f9696",
+                        "surface-bright": "#f7f9ff",
+                        "primary-fixed-dim": "#aec7f6",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#293139",
+                        "surface-container-highest": "#dbe3ee",
+                        "surface-container": "#e7eff9",
+                        "surface-container-high": "#e1e9f4",
+                        "on-surface-variant": "#44474e",
+                        "on-tertiary-fixed-variant": "#004f4f",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#002020",
+                        "outline-variant": "#c4c6cf",
+                        "secondary-container": "#dfe0e0",
+                        "surface-variant": "#dbe3ee",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#000d0d",
+                        "surface-tint": "#465f88",
+                        "on-primary-fixed": "#001b3d",
+                        "background": "#f7f9ff",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#141c24",
+                        "surface": "#f7f9ff",
+                        "tertiary-container": "#002626",
+                        "tertiary-fixed": "#93f2f2",
+                        "secondary": "#5d5f5f",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#d6e3ff",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-primary-fixed-variant": "#2d476f",
+                        "surface-container-low": "#edf4ff",
+                        "on-primary-container": "#708ab5",
+                        "secondary-fixed": "#e2e2e2",
+                        "on-secondary-container": "#616363",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#002147",
+                        "on-error": "#ffffff",
+                        "outline": "#74777f",
+                        "inverse-on-surface": "#eaf1fc",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "on-secondary-fixed-variant": "#454747",
+                        "primary": "#000a1e",
+                        "on-background": "#141c24",
+                        "inverse-primary": "#aec7f6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "gutter": "24px",
+                        "xxl": "48px",
+                        "container-max": "1440px",
+                        "lg": "24px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Public Sans"],
+                        "headline-sm": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "headline-md": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "body-sm": ["Public Sans"],
+                        "title-lg": ["Public Sans"],
+                        "headline-lg-mobile": ["Public Sans"],
+                        "display-lg": ["Public Sans"],
+                        "headline-lg": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "title-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #f7f9ff; /* bg-background fallback */
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Hide scrollbar for clean horizontal scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-primary docked full-width top-0 border-b border-outline-variant dark:border-primary-container flat no shadows z-50 sticky">
+<div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" style="font-variation-settings: 'FILL' 1;">anchor</span>
+<h1 class="text-title-lg font-title-lg font-bold tracking-tight text-primary dark:text-primary-fixed">VADHAVAN PORT</h1>
+</div>
+<button class="text-label-md font-label-md text-primary dark:text-primary-fixed hover:text-primary dark:hover:text-primary-fixed-dim transition-colors flex items-center gap-xs px-sm py-xs border border-transparent rounded hover:border-outline-variant active:scale-95 transition-transform">
+                Admin Login
+                <span class="material-symbols-outlined text-[16px]">login</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col pb-xxl">
+<!-- Hero Section -->
+<section class="relative w-full h-[60vh] min-h-[400px] flex flex-col justify-end p-md overflow-hidden bg-primary-container">
+<div class="absolute inset-0 bg-cover bg-center opacity-80 mix-blend-overlay" data-alt="A breathtaking, wide-angle aerial view of a massive modern deep-water port under active development during golden hour. The scene is bathed in warm, soft sunlight, highlighting massive cranes, expansive concrete piers, and calm blue waters. The aesthetic is corporate, progressive, and industrial, utilizing a color palette of deep navy blues, maritime teals, and pristine whites, conveying a sense of monumental infrastructure progress and institutional stability." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAOGhzBz7xOxt7n_1VCf-mYUW7qAoibgnWi8iYu9VdRxcDzqpkyr6fOLjf8xCo_sCV4cihIp8Mv-nie07Bq1Ft1l8ukegWnBjFRNl7mnxXSO8r6WIGLs94i1WyMnt28W4qk26C55zna3pX-UGBsQ3QP1GiuWaXJ3O8ugGFiIZkrL6gFCHWoh_ocJQNiU0zVcpqiN0bFq_Bg80us2aQBHuthCGsaByY8C-UShTsznav_dTHSvPccBr94')"></div>
+<!-- Gradient Overlay for text readability -->
+<div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/50 to-transparent"></div>
+<div class="relative z-10 text-on-primary max-w-container-max mx-auto w-full pb-xl">
+<span class="inline-block px-sm py-xs bg-tertiary-container text-on-tertiary-container font-label-md text-label-md uppercase tracking-wider mb-sm rounded-sm">Project Vision</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-display-lg md:text-display-lg font-bold mb-sm text-surface-container-lowest shadow-sm leading-tight">
+                    Building India's <br/>Premier Deep Draft Port
+                </h2>
+<p class="font-body-lg text-body-lg text-surface-variant max-w-lg mb-md opacity-90">
+                    A state-of-the-art maritime hub designed for global trade efficiency, sustainability, and unprecedented capacity.
+                </p>
+<button class="bg-surface-container-lowest text-primary font-label-md text-label-md px-gutter py-sm rounded-sm border border-transparent hover:bg-surface-variant transition-colors flex items-center gap-xs w-fit">
+                    Explore Master Plan
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Key Statistics (Bento Grid Style) -->
+<section class="px-md py-xl -mt-lg relative z-20 max-w-container-max mx-auto w-full">
+<div class="grid grid-cols-2 gap-sm">
+<!-- Stat Card 1 -->
+<div class="col-span-2 bg-surface-container-lowest border border-outline-variant rounded p-lg flex flex-col justify-between shadow-sm hover:border-outline transition-colors">
+<div class="flex items-center gap-xs text-on-surface-variant mb-xl">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<h3 class="font-label-md text-label-md uppercase">Total Investment</h3>
+</div>
+<div>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary tracking-tight">₹76,220<span class="font-headline-sm text-headline-sm text-on-surface-variant ml-xs font-normal">Cr</span></span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Estimated total project cost</p>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-md flex flex-col justify-between shadow-sm hover:border-outline transition-colors">
+<div class="text-on-surface-variant mb-md">
+<span class="material-symbols-outlined text-[20px]">layers</span>
+<h3 class="font-label-md text-label-md uppercase mt-xs">Total Area</h3>
+</div>
+<div>
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">17,471</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant block">Hectares offshore</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-md flex flex-col justify-between shadow-sm hover:border-outline transition-colors">
+<div class="text-on-surface-variant mb-md">
+<span class="material-symbols-outlined text-[20px]">directions_boat</span>
+<h3 class="font-label-md text-label-md uppercase mt-xs">Capacity</h3>
+</div>
+<div>
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">298<span class="font-body-sm text-body-sm text-on-surface-variant ml-xs font-normal">MMT</span></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant block">Annual cargo handling</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Links (Asymmetric Grid) -->
+<section class="px-md py-lg max-w-container-max mx-auto w-full">
+<h2 class="font-title-lg text-title-lg font-bold text-primary mb-md border-b-2 border-primary w-fit pb-xs">Project Resources</h2>
+<div class="grid grid-cols-2 gap-sm">
+<a class="col-span-2 group bg-surface border border-outline-variant rounded p-md flex items-center justify-between hover:bg-surface-container transition-colors" href="#">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">architecture</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Infrastructure</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Breakwaters, berths &amp; connectivity</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<a class="group bg-surface border border-outline-variant rounded p-md flex flex-col gap-sm hover:bg-surface-container transition-colors" href="#">
+<div class="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[18px]">timeline</span>
+</div>
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface group-hover:text-primary transition-colors">Timeline</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Phases &amp; milestones</p>
+</div>
+</a>
+<a class="group bg-surface border border-outline-variant rounded p-md flex flex-col gap-sm hover:bg-surface-container transition-colors" href="#">
+<div class="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[18px]">description</span>
+</div>
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface group-hover:text-primary transition-colors">Documents</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">EIA reports &amp; tenders</p>
+</div>
+</a>
+</div>
+</section>
+<!-- Latest News -->
+<section class="px-md py-lg max-w-container-max mx-auto w-full">
+<div class="flex justify-between items-end mb-md border-b border-outline-variant pb-xs">
+<h2 class="font-title-lg text-title-lg font-bold text-primary">Latest News</h2>
+<a class="font-label-md text-label-md text-primary hover:underline" href="#">View All</a>
+</div>
+<div class="flex overflow-x-auto gap-md pb-sm no-scrollbar snap-x">
+<!-- News Card 1 -->
+<div class="min-w-[280px] w-[80vw] max-w-[320px] snap-start bg-surface-container-lowest border border-outline-variant rounded overflow-hidden flex flex-col shadow-sm">
+<div class="h-32 bg-cover bg-center w-full border-b border-outline-variant" data-alt="A professional, high-resolution photograph of a diverse group of engineers and port officials in hard hats and high-visibility vests gathered around a large blueprint on a construction site. The lighting is bright and natural, indicating a clear, sunny day. The style is documentary yet polished, emphasizing teamwork, precision, and large-scale maritime engineering. Colors feature strong navy blues, crisp whites, and subtle metallic grays." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCfBediL9nZWpjeh90IRSVGyNMmN04Dt8cGMgFLdvktTZCiRbJ3rBQsTqdhz52rZnHdwRraTmPXO-U4GtsaJh0LHekP8maws9-XiugfqmXR67J5qz3CWbBOrJMzsIjscepjpdO7v7egMC1y8f9DVfU4ehOuuH1asq-z1XGItzMVCSFaJeljC6HCRS09X7J-o7nSd6QgnYvvKoz8eq08pcbyuEsEM2XsYsAIjAWtJXk-SebkBvZLCyHI')"></div>
+<div class="p-md flex-grow flex flex-col justify-between">
+<div>
+<span class="font-label-md text-[10px] text-primary bg-primary-fixed px-xs py-xs rounded-sm mb-sm inline-block">MILESTONE</span>
+<h4 class="font-title-lg text-title-lg text-on-surface mb-xs leading-snug">Environmental Clearance Granted</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">The Ministry of Environment, Forest and Climate Change has officially granted structural clearance for phase 1 development.</p>
+</div>
+<span class="font-body-sm text-[10px] text-outline mt-sm block">Oct 24, 2024</span>
+</div>
+</div>
+<!-- News Card 2 -->
+<div class="min-w-[280px] w-[80vw] max-w-[320px] snap-start bg-surface-container-lowest border border-outline-variant rounded overflow-hidden flex flex-col shadow-sm">
+<div class="h-32 bg-cover bg-center w-full border-b border-outline-variant" data-alt="A detailed, dynamic shot of an enormous container ship being guided by tugboats into a newly constructed port terminal. The water is a deep, rich maritime teal, contrasting with the bright white superstructure of the ship and the robust steel architecture of the port cranes. The lighting is bright and clear, conveying operational efficiency and modern logistics in a clean, light-mode corporate aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDdBlofptsDDHYtr8rlSbQxe6tgzLuHDHiOhjwL8kGpVo3YfsWpjFCeYV4RYFR2kBFBDR941hqSzcWZBZIlUU89RSEx1s_zow71QxjCbGtvOJSZrJtB6lwJDJCaGjjhbLjBaDwP-n5ALYGqJLqsf1VGlt0NrErs1SOxifvOHrOi7E7GcDAZ4tvuO9cJolk1V0lqbmpsjGrfsKmeK6In64bRhqoW9I_0xbuhSHvX08bZTqiky_3aoeF_')"></div>
+<div class="p-md flex-grow flex flex-col justify-between">
+<div>
+<span class="font-label-md text-[10px] text-on-tertiary-container bg-tertiary-container px-xs py-xs rounded-sm mb-sm inline-block">PROCUREMENT</span>
+<h4 class="font-title-lg text-title-lg text-on-surface mb-xs leading-snug">Dredging Tender Released</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Global tenders invited for capital dredging and reclamation works to prepare the offshore berthing areas.</p>
+</div>
+<span class="font-body-sm text-[10px] text-outline mt-sm block">Oct 18, 2024</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest dark:bg-primary border-t-2 border-primary dark:border-primary-container full-width flat no shadows">
+<div class="w-full px-gutter py-xl mt-auto flex flex-col items-center gap-md max-w-container-max mx-auto">
+<h2 class="text-title-lg font-title-lg font-bold text-primary dark:text-primary-fixed mb-sm">VADHAVAN PORT</h2>
+<nav class="flex flex-wrap justify-center gap-x-md gap-y-sm text-label-md font-label-md">
+<a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Terms of Service</a>
+<a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">RTI</a>
+<a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Contact Us</a>
+</nav>
+<p class="text-body-sm font-body-sm text-on-surface dark:text-on-primary text-center mt-md max-w-sm opacity-80">
+                © 2024 Vadhavan Port Project Management. Government of India Initiative.
+            </p>
+</div>
+</footer>
+</body></html>
