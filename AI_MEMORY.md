@@ -1,5 +1,5 @@
 # 🧠 AI_MEMORY.md — Vadhvan GOES Port Platform
-> **Last Updated**: 2026-07-12  
+> **Last Updated**: 2026-07-12 (Session 2)
 > **Purpose**: Prevent context rot. Read this FIRST before any work session.
 
 ---
@@ -18,7 +18,7 @@
 
 ## 🏗 ARCHITECTURE OVERVIEW
 
-### Structure
+### Monorepo Structure
 ```
 oodu-Hackthon/
 ├── frontend/          ← React 19 + TypeScript + Vite + Tailwind + Shadcn
@@ -31,270 +31,397 @@ oodu-Hackthon/
 
 ### Frontend Stack
 - React 19, TypeScript, Vite
-- Tailwind CSS (v3)
-- Shadcn UI components
-- React Router v6
-- React Hook Form + Zod
-- TanStack Query (React Query)
-- Framer Motion
-- Recharts
+- Tailwind CSS (v3) – custom design system tokens
+- Shadcn UI + Radix UI components
+- React Router v7 (BrowserRouter, nested routes)
+- React Hook Form + Zod (all forms)
+- TanStack Query v5 (React Query) – all data fetching
+- Framer Motion (animations)
+- Recharts (all charts)
 - Lucide Icons
-- Leaflet (maps)
+- Leaflet + React Leaflet (maps)
+- Axios with interceptors (auto token refresh)
 
 ### Backend Stack
 - Node.js + Express.js + TypeScript
-- JWT Authentication + Refresh Tokens
-- Bcrypt, Helmet, CORS, Morgan
+- JWT Authentication: accessToken (15min) + refreshToken (7d, httpOnly cookie)
+- Bcrypt (12 rounds), Helmet, CORS, Morgan, Compression
 - Prisma ORM → PostgreSQL
-- Server-Sent Events (SSE) for real-time updates
-- Rate limiting, input validation
+- Server-Sent Events (SSE) for real-time updates via sseManager
+- Rate limiting (100/15min general, 10/15min auth)
+- Zod validation on all inputs
+- Role-based access control middleware
 
 ---
 
-## 🎨 DESIGN SYSTEM (from Design/portsync/DESIGN.md)
+## 🎨 DESIGN SYSTEM
 
-### Color Palette
+### Color Palette (from Design/portsync/DESIGN.md)
 ```
-Primary (Deep Navy):     #0B1F33  (sidebar, headers)
-Secondary (Port Blue):   #2D5BFF  (actions, CTAs)
-Success Green:           #27AE60
-Warning Orange:          #F5A623
-Danger Red:              #E74C3C / #BA1A1A
-Background:              #F7F9FC  (neutral grey)
-Surface/Cards:           #FFFFFF
-Border:                  #E2E8F0 / #C4C6CD
-Text Primary:            #191C1E
-Text Secondary:          #44474C
+Primary (Deep Navy):     #0B1F33  → tailwind: bg-primary, bg-port-navy (sidebar)
+Secondary (Port Blue):   #2D5BFF  → tailwind: bg-secondary (CTAs, active nav)
+Success Green:           #27AE60  → tailwind: bg-success, text-success
+Warning Orange:          #F5A623  → tailwind: bg-warning, text-warning
+Danger Red:              #E74C3C  → tailwind: bg-error, text-error
+Background:              #F7F9FC  → tailwind: bg-background
+Surface/Cards:           #FFFFFF  → tailwind: bg-surface
+Border:                  #C4C6CD  → tailwind: border-outline-variant
+Text Primary:            #191C1E  → tailwind: text-on-surface
+Text Secondary:          #44474C  → tailwind: text-on-surface-variant
 ```
 
-### Typography
-- Font: **Inter** (Google Fonts)
-- Display: 32px/700
-- Headline: 24px/600, 20px/600
-- Body: 16px/400, 14px/400
-- Label: 12px/600
+### Typography Scale
+- `text-display-lg`: 32px/700 – page display headers
+- `text-headline-md`: 24px/600 – section headings
+- `text-headline-sm`: 20px/600 – card headers
+- `text-title-lg`: 18px/600 – subsection titles
+- `text-body-md`: 16px/400 – body text
+- `text-body-sm`: 14px/400 – secondary text
+- `text-label-md`: 12px/600 – labels, table headers
+- `text-label-sm`: 11px/500 – micro labels
+- `text-data`: 13px/400 – table cell data
 
-### Layout
+### Layout Constants
 - Sidebar: 240px expanded, 72px collapsed, bg `#0B1F33`
-- Cards: 12px border-radius, 1px border, soft shadow
-- Buttons: 8px radius, primary `#2D5BFF`, secondary `#0B1F33` outline
-- Tables: 48px row height, zebra striping, sticky headers
+- TopNav: 64px height, white, shadow
+- Cards: `rounded-md`, `border border-outline-variant`, `shadow-card`
+- Buttons: `rounded`, primary `#2D5BFF`, secondary `#0B1F33` outline
 
-### Rules
-- NO landing pages, NO hero images, NO ocean backgrounds, NO 3D illustrations
-- MUST look like SAP Fiori / Oracle Fusion / Stripe Dashboard / Odoo Enterprise
-- Dark sidebar + light workspace
+### CSS Classes (from index.css)
+- `.card` – white card base
+- `.kpi-card` – KPI card with padding
+- `.badge`, `.badge-success`, `.badge-warning`, `.badge-error`, `.badge-info`, `.badge-neutral`
+- `.btn`, `.btn-primary`, `.btn-secondary`, `.btn-ghost`, `.btn-danger`, `.btn-success`
+- `.form-input`, `.form-label`, `.form-error`
+- `.data-table` – professional table styles
+- `.nav-item-active`, `.nav-item-inactive`
+- `.kanban-column`, `.kanban-card`
+- `.live-dot` – animated live indicator
 
 ---
 
 ## 🗄️ DATABASE SCHEMA (PostgreSQL via Prisma)
 
-### Tables
-1. **users** – id, name, email, password_hash, role, status, created_at
-2. **roles** – id, name, permissions (JSON)
-3. **vehicles** – id, registration_no (UNIQUE), name, model, type, capacity, odometer, fuel_level, health_score, status, driver_id, location_lat, location_lng, created_at
-4. **drivers** – id, name, photo_url, license_no (UNIQUE), license_category, license_expiry, phone, emergency_contact, safety_score, experience_years, status, vehicle_id
-5. **trips** – id, trip_number, container_id, vehicle_id, driver_id, source, destination, cargo_weight, planned_distance, estimated_time, status, priority, notes, dispatched_at, completed_at
-6. **containers** – id, container_code, weight, priority, status, source_dock_id, dest_warehouse_id, ship_id, crane_id
-7. **container_requests** – id, container_id, requested_by, status, notes
-8. **equipment** – id, name, equipment_number, type (CRANE/FORKLIFT/REACH_STACKER/TRAILER), status, health_score, maintenance_due, assigned_dock_id, operator_id
-9. **maintenance_logs** – id, vehicle_id, equipment_id, type, description, technician, cost, status, scheduled_at, completed_at
-10. **fuel_logs** – id, vehicle_id, driver_id, trip_id, quantity_litres, cost, mileage, distance_covered, logged_at
-11. **expenses** – id, trip_id, vehicle_id, type (MAINTENANCE/FUEL/TOLL/PARKING/INSURANCE/REPAIR), amount, description, created_at
-12. **notifications** – id, user_id, type, title, message, read, created_at
-13. **activity_logs** – id, user_id, action, module, entity_id, ip_address, created_at
-14. **audit_logs** – id, user_id, action, table_name, record_id, old_values, new_values, created_at
-15. **warehouses** – id, name, capacity, available_space, location_lat, location_lng
-16. **docks** – id, dock_number, status, assigned_ship_id, assigned_crane_id, container_count, warehouse_id
-17. **ships** – id, imo_number, name, arrival_time, expected_departure, dock_id, container_count, priority, cargo_type, status, ship_length, ship_width, draft
-18. **rail_tracks** – id, track_number, status, capacity, destination, departure_time, container_ids (JSON)
-19. **gps_logs** – id, vehicle_id, latitude, longitude, speed, timestamp, is_offline
-20. **settings** – id, org_name, theme, language, notification_prefs (JSON)
+### Location: `backend/src/prisma/schema.prisma`
 
-### Key Relationships
-- driver ↔ vehicle (one-to-one current assignment)
-- trip → vehicle, driver, container
-- container → dock, warehouse, ship, crane
-- maintenance_log → vehicle / equipment
-- fuel_log → vehicle, driver, trip
-- expense → trip, vehicle
-- dock → warehouse, ship, crane
+### Prisma Model Names (EXACT - use these in code)
+1. **User** → table `users`
+2. **Vehicle** → table `vehicles`
+3. **Driver** → table `drivers`
+4. **Ship** → table `ships`
+5. **Dock** → table `docks`
+6. **Warehouse** → table `warehouses`
+7. **RailTrack** → table `rail_tracks`
+8. **Container** → table `containers`
+9. **ContainerRequest** → table `container_requests`
+10. **Equipment** → table `equipment`
+11. **Trip** → table `trips`
+12. **MaintenanceLogs** → table `maintenance_logs` (**NOTE: plural "Logs"**)
+13. **FuelLog** → table `fuel_logs`
+14. **Expense** → table `expenses`
+15. **Notification** → table `notifications`
+16. **ActivityLog** → table `activity_logs`
+17. **AuditLog** → table `audit_logs`
+18. **GpsLog** → table `gps_logs`
+19. **Settings** → table `settings`
+
+### ⚠️ CRITICAL: MaintenanceLogs is PLURAL (not MaintenanceLog)
+Always import as: `prisma.maintenanceLogs.findMany(...)` etc.
+
+### Key Enums
+```typescript
+VehicleStatus: AVAILABLE | ON_TRIP | IN_SHOP | RETIRED
+DriverStatus: AVAILABLE | ON_TRIP | OFF_DUTY | SUSPENDED
+TripStatus: DRAFT | APPROVED | DISPATCHED | LOADING | IN_TRANSIT | DELIVERED | COMPLETED | CANCELLED
+ContainerStatus: WAITING | ALLOCATED | LOADING | IN_TRANSIT | DELIVERED | CANCELLED
+EquipmentStatus: AVAILABLE | BUSY | MAINTENANCE | OFFLINE
+MaintenanceStatus: OPEN | IN_PROGRESS | COMPLETED
+ShipStatus: WAITING | DOCKED | LOADING | UNLOADING | COMPLETED | DEPARTED
+DockStatus: AVAILABLE | OCCUPIED | MAINTENANCE
+```
 
 ---
 
 ## 🔐 AUTHENTICATION & ROLES
 
 ### JWT Strategy
-- Access token: 15min expiry
-- Refresh token: 7 days, stored in httpOnly cookie
-- Bcrypt rounds: 12
+- Access token: 15min expiry, signed with JWT_SECRET
+- Refresh token: 7 days, stored in httpOnly cookie named `refreshToken`
+- Bcrypt rounds: 12 (from BCRYPT_ROUNDS env)
+
+### Token Flow
+1. POST /api/auth/login → returns accessToken in body + sets refreshToken cookie
+2. Frontend stores accessToken in localStorage
+3. Axios interceptor adds `Authorization: Bearer {token}` to all requests
+4. On 401 response, interceptor calls /api/auth/refresh with cookie
+5. If refresh fails → redirect to /login
 
 ### Roles & Permissions
-| Role | Access |
-|------|--------|
-| Admin | Full access to everything |
-| Operations Manager | Dashboard, trips, containers, ships, docks, reports |
-| Fleet Manager | Vehicles, drivers, trips, fuel, maintenance |
-| Maintenance Supervisor | Maintenance, vehicles (status only), equipment |
-| Driver | Own trips only (view + status update) |
+| Role | Access Level |
+|------|-------------|
+| ADMIN | Full access to everything including users management |
+| OPERATIONS_MANAGER | Dashboard, trips, containers, ships, docks, reports, analytics |
+| FLEET_MANAGER | Vehicles, drivers, trips, fuel, maintenance |
+| MAINTENANCE_SUPERVISOR | Maintenance, vehicles (read), equipment |
+| DRIVER | Own trips only |
 
 ---
 
-## 🚀 KEY MODULES
+## 📁 COMPLETE FOLDER STRUCTURE
 
-### 1. Port Command Center
-- Live overview: ships, docks, cranes, vehicles, drivers, containers
-- Port Health Score (composite KPI)
-- Real-time SSE updates
-- Turnaround Time Monitor
-
-### 2. Smart Resource Recommendation Engine
-- When container request created → evaluate all resources
-- Score: fuel level, capacity, maintenance status, driver license, distance
-- Output: best vehicle + driver + equipment combination with reasoning
-
-### 3. Smart Dispatch Engine
-- Validates: vehicle, driver, capacity, maintenance, license, dock, container, warehouse, rail
-- Atomic status changes: vehicle → ON_TRIP, driver → ON_TRIP
-- Trip completion: restores both to AVAILABLE
-
-### 4. Business Rules (enforced server-side)
-- Retired vehicles → never in dispatch list
-- In-maintenance vehicles → never in dispatch list  
-- Expired driver license → cannot assign
-- Suspended drivers → cannot assign
-- Vehicle already On Trip → cannot assign again
-- Cargo weight > vehicle capacity → rejected
-- Maintenance open → vehicle status = IN_SHOP
-- Maintenance closed → vehicle status = AVAILABLE (unless RETIRED)
-
-### 5. Port Health Score Formula
+### Frontend (`frontend/src/`)
 ```
-score = (fleet_availability * 0.25) + 
-        (equipment_availability * 0.20) + 
-        (trip_completion_rate * 0.20) + 
-        (fuel_efficiency * 0.10) + 
-        (maintenance_uptime * 0.15) + 
-        (dock_utilization * 0.10)
-Rating: 90+ = Excellent, 70-89 = Good, 50-69 = Average, <50 = Critical
+├── App.tsx                          ← Router + Provider setup
+├── main.tsx                         ← React entry point
+├── index.css                        ← Design system CSS
+├── components/
+│   ├── layouts/
+│   │   ├── AppLayout.tsx            ← Sidebar + TopNav + Outlet
+│   │   ├── Sidebar.tsx              ← Dark nav sidebar
+│   │   └── TopNavBar.tsx            ← Search, notifs, profile
+│   ├── ui/
+│   │   ├── StatusBadge.tsx          ← Colored status badges
+│   │   ├── HealthScore.tsx          ← Color-coded health display
+│   │   ├── KPICard.tsx              ← Dashboard KPI cards
+│   │   ├── LoadingSpinner.tsx       ← Loading indicator
+│   │   ├── EmptyState.tsx           ← Empty table/list state
+│   │   └── ConfirmDialog.tsx        ← Delete confirmation
+│   ├── charts/
+│   │   ├── AreaChartWidget.tsx      ← Recharts AreaChart wrapper
+│   │   ├── BarChartWidget.tsx       ← Recharts BarChart wrapper
+│   │   ├── PieChartWidget.tsx       ← Recharts PieChart + legend
+│   │   └── LineChartWidget.tsx      ← Recharts LineChart wrapper
+│   └── forms/ (if needed for complex reusable forms)
+├── pages/
+│   ├── auth/LoginPage.tsx           ← Enterprise login (2-column)
+│   ├── dashboard/DashboardPage.tsx  ← KPIs + charts + alerts
+│   ├── command-center/CommandCenterPage.tsx ← Port Command Center
+│   ├── fleet/FleetPage.tsx          ← Vehicle CRUD table
+│   ├── drivers/DriversPage.tsx      ← Driver CRUD table
+│   ├── trips/TripsPage.tsx          ← Trip management + timeline
+│   ├── containers/ContainersPage.tsx ← Kanban board + table
+│   ├── equipment/EquipmentPage.tsx  ← Equipment cards/table
+│   ├── maintenance/MaintenancePage.tsx ← Maintenance dashboard
+│   ├── fuel/FuelPage.tsx            ← Fuel & expenses (tabbed)
+│   ├── ships/ShipsPage.tsx          ← Ship arrival module
+│   ├── docks/DocksPage.tsx          ← Dock management
+│   ├── warehouses/WarehousesPage.tsx ← Warehouse management
+│   ├── rail/RailPage.tsx            ← Rail dispatch
+│   ├── reports/ReportsPage.tsx      ← Reports + CSV export
+│   ├── analytics/AnalyticsPage.tsx  ← Analytics charts
+│   ├── notifications/NotificationsPage.tsx ← Notification center
+│   └── settings/SettingsPage.tsx    ← Settings module
+├── hooks/
+│   ├── useSSE.ts                    ← EventSource subscription
+│   └── useAuth.ts                   ← Re-export from AuthContext
+├── contexts/
+│   ├── AuthContext.tsx              ← Auth state + login/logout
+│   └── SSEContext.tsx               ← SSE connection
+├── services/
+│   └── api.ts                       ← All Axios API calls
+├── types/
+│   └── index.ts                     ← All TypeScript interfaces
+└── utils/
+    └── index.ts                     ← Formatters, helpers, scoring
+```
+
+### Backend (`backend/src/`)
+```
+├── index.ts                         ← Express app entry, all middleware
+├── config/
+│   └── env.ts                       ← Environment variables config
+├── middlewares/
+│   ├── auth.ts                      ← JWT verify middleware
+│   ├── role.ts                      ← requireRole() factory
+│   ├── errorHandler.ts              ← Global error handler
+│   └── rateLimiter.ts               ← express-rate-limit configs
+├── validators/
+│   └── index.ts                     ← All Zod schemas
+├── services/
+│   ├── auth.service.ts
+│   ├── vehicle.service.ts
+│   ├── driver.service.ts
+│   ├── trip.service.ts              ← dispatch engine (atomic)
+│   ├── container.service.ts
+│   ├── equipment.service.ts
+│   ├── maintenance.service.ts       ← open/close with vehicle status
+│   ├── fuel.service.ts
+│   ├── expense.service.ts
+│   ├── ship.service.ts              ← dock/depart logic
+│   ├── dock.service.ts
+│   ├── warehouse.service.ts
+│   ├── rail.service.ts
+│   ├── analytics.service.ts         ← KPIs, charts data
+│   ├── report.service.ts
+│   ├── portHealth.service.ts        ← Port Health Score formula
+│   ├── recommend.service.ts         ← Smart recommendation engine
+│   ├── notification.service.ts
+│   ├── activityLog.service.ts
+│   └── settings.service.ts
+├── controllers/
+│   └── [module].controller.ts       ← One per service, thin layer
+├── routes/
+│   └── [module].routes.ts           ← Express Router per module
+├── prisma/
+│   ├── schema.prisma                ← Complete DB schema
+│   └── seed.ts                      ← Seed realistic port data
+└── utils/
+    ├── jwt.ts                       ← sign/verify JWT
+    ├── response.ts                  ← sendSuccess/sendError helpers
+    └── sseManager.ts               ← SSE connection manager
+```
+
+---
+
+## 🚀 KEY MODULES & BUSINESS LOGIC
+
+### Smart Dispatch Engine (trip.service.ts)
+```
+dispatch(tripId) → ATOMIC TRANSACTION:
+  1. Load trip with vehicle and driver
+  2. Validate: vehicle.status === AVAILABLE
+  3. Validate: driver.status === AVAILABLE
+  4. Validate: driver.licenseExpiry > now()
+  5. Validate: trip.cargoWeight <= vehicle.maxCapacity
+  6. If any fail → throw 422 error with reason
+  7. If all pass → prisma.$transaction([
+       trip.update(status=DISPATCHED, dispatchedAt=now()),
+       vehicle.update(status=ON_TRIP),
+       driver.update(status=ON_TRIP)
+     ])
+  8. Emit SSE: trip_update, vehicle_update, driver_update
+  9. Log activity
+```
+
+### Complete Trip (trip.service.ts)
+```
+complete(tripId) → ATOMIC:
+  1. Set trip.status = COMPLETED, completedAt = now()
+  2. Set vehicle.status = AVAILABLE
+  3. Set driver.status = AVAILABLE
+  4. Emit SSE events
+```
+
+### Open Maintenance (maintenance.service.ts)
+```
+open/createMaintenance(data) →
+  1. Create MaintenanceLogs record
+  2. If vehicleId → set vehicle.status = IN_SHOP
+  3. Vehicle disappears from available list automatically
+```
+
+### Close Maintenance (maintenance.service.ts)
+```
+close(id, cost) →
+  1. Set MaintenanceLogs.status = COMPLETED, completedAt = now(), cost = finalCost
+  2. If vehicleId → check vehicle.status ≠ RETIRED → set vehicle.status = AVAILABLE
+  3. Emit SSE events
+```
+
+### Smart Recommendation Engine (recommend.service.ts)
+```
+getRecommendation(cargoWeight, sourceDockId?, destination?) →
+  1. Find available vehicles: status=AVAILABLE, maxCapacity >= cargoWeight
+  2. Find available drivers: status=AVAILABLE, licenseExpiry > now()
+  3. For each (vehicle, driver) pair, compute score:
+     fuelScore = vehicle.fuelLevel / 100 * 30
+     healthScore = vehicle.healthScore / 100 * 25
+     safetyScore = driver.safetyScore / 100 * 25
+     expScore = min(driver.experienceYears / 10, 1) * 20
+     total = fuelScore + healthScore + safetyScore + expScore
+  4. Sort by total score DESC
+  5. Return best match with reasons array
+```
+
+### Port Health Score Formula (portHealth.service.ts)
+```
+score = 
+  (availableVehicles / totalVehicles) * 25 +
+  (availableEquipment / totalEquipment) * 20 +
+  (completedTrips / (completedTrips + cancelledTrips + 1)) * 20 +
+  (avgFuelEfficiency / maxExpectedEfficiency) * 10 +
+  (1 - (inShopVehicles / totalVehicles)) * 15 +
+  (availableDocks / totalDocks) * 10
+
+Rating: ≥90 EXCELLENT, 70-89 GOOD, 50-69 AVERAGE, <50 CRITICAL
 ```
 
 ---
 
 ## 📡 REAL-TIME (SSE)
 
-- Endpoint: `GET /api/events` (Server-Sent Events)
-- Events: `dashboard_update`, `trip_update`, `vehicle_update`, `driver_update`, `maintenance_alert`, `container_update`, `notification`
-- Frontend subscribes via `EventSource`
-- Cloudflare Worker forwards updates
+### Endpoint: `GET /api/events`
+- Returns text/event-stream with proper headers
+- sseManager.addClient(res) on connection
+- sseManager.broadcast(eventType, data) on state changes
+
+### Event Types
+- `dashboard_update` – KPI refresh trigger
+- `trip_update` – trip status changed
+- `vehicle_update` – vehicle status changed
+- `driver_update` – driver status changed
+- `maintenance_alert` – maintenance opened/closed
+- `container_update` – container status changed
+- `notification` – new notification created
+
+### Frontend SSE Hook (SSEContext.tsx)
+- Creates EventSource on mount
+- Publishes events via context
+- React Query invalidateQueries on relevant events
 
 ---
 
-## 🌐 API ROUTES
+## 🌐 API ROUTES REFERENCE
 
-### Auth
-- `POST /api/auth/login`
-- `POST /api/auth/register`
-- `POST /api/auth/logout`
-- `POST /api/auth/refresh`
-- `POST /api/auth/forgot-password`
-- `POST /api/auth/reset-password`
-- `GET /api/auth/profile`
+### Auth (no auth required for login/register)
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| POST | /api/auth/login | No | Login, returns token + sets cookie |
+| POST | /api/auth/register | No | Register new user |
+| POST | /api/auth/logout | Yes | Clear refresh cookie |
+| POST | /api/auth/refresh | Cookie | Refresh access token |
+| GET | /api/auth/profile | Yes | Get current user |
+| PUT | /api/auth/profile | Yes | Update profile |
 
-### Resources (all protected)
-- `/api/vehicles` – CRUD + status change
-- `/api/drivers` – CRUD + status change
-- `/api/trips` – CRUD + dispatch + complete + cancel
-- `/api/containers` – CRUD + tracking
-- `/api/equipment` – CRUD
-- `/api/maintenance` – CRUD + open + close
-- `/api/fuel` – CRUD
-- `/api/expenses` – CRUD
-- `/api/ships` – CRUD + dock assignment
-- `/api/docks` – CRUD
-- `/api/warehouses` – CRUD
-- `/api/rail-tracks` – CRUD
-- `/api/reports` – fleet, fuel, trip, driver, container, vehicle-roi
-- `/api/analytics` – aggregated stats
-- `/api/notifications` – list, mark read
-- `/api/activity-logs` – list
-- `/api/settings` – get/update
-- `/api/recommend` – Smart Resource Recommendation Engine
-- `/api/port-health` – Port Health Score
-- `/api/events` – SSE stream
-
----
-
-## 📁 FOLDER STRUCTURE
-
-### Frontend (`frontend/`)
-```
-src/
-├── components/
-│   ├── ui/              (Shadcn base components)
-│   ├── layouts/         (AppLayout, Sidebar, TopNav)
-│   ├── charts/          (Recharts wrappers)
-│   ├── tables/          (DataTable, columns)
-│   ├── forms/           (FormFields with RHF+Zod)
-│   ├── modals/          (Create/Edit dialogs)
-│   ├── cards/           (KPI cards, stat cards)
-│   └── maps/            (Leaflet wrapper)
-├── pages/
-│   ├── auth/            (Login)
-│   ├── dashboard/       (Main dashboard)
-│   ├── command-center/  (Port Command Center)
-│   ├── fleet/           (Vehicle management)
-│   ├── drivers/         (Driver management)
-│   ├── trips/           (Trip management)
-│   ├── containers/      (Container ops + Kanban)
-│   ├── equipment/       (Crane, forklift, etc.)
-│   ├── maintenance/     (Maintenance dashboard)
-│   ├── fuel/            (Fuel & expenses)
-│   ├── ships/           (Ship arrival module)
-│   ├── docks/           (Dock management)
-│   ├── warehouses/      (Warehouse management)
-│   ├── rail/            (Rail dispatch)
-│   ├── reports/         (Reports & export)
-│   ├── analytics/       (Analytics dashboard)
-│   ├── notifications/   (Notification center)
-│   └── settings/        (Settings)
-├── hooks/               (useSSE, useAuth, useFilters, etc.)
-├── services/            (API service functions)
-├── utils/               (formatters, validators, scoring)
-├── types/               (TypeScript interfaces)
-├── contexts/            (AuthContext, ThemeContext, SSEContext)
-├── routes/              (Protected routes, route config)
-└── assets/              (Logo, icons)
-```
-
-### Backend (`backend/`)
-```
-src/
-├── controllers/         (Request handlers per module)
-├── routes/              (Express router per module)
-├── middlewares/         (auth, role, validation, error, rate-limit)
-├── services/            (Business logic per module)
-├── prisma/              (schema.prisma, seed.ts)
-├── utils/               (jwt, bcrypt, response helpers, SSE manager)
-├── validators/          (Zod schemas per module)
-├── config/              (env config, cors config)
-├── logs/                (Morgan logs)
-└── uploads/             (Vehicle/driver photos)
-```
+### Resources (all require auth)
+| Path | Notes |
+|------|-------|
+| /api/vehicles | + /available, /stats |
+| /api/drivers | + /available |
+| /api/trips | + /:id/dispatch, /:id/complete, /:id/cancel |
+| /api/containers | + /requests, /requests/:id |
+| /api/equipment | + /available |
+| /api/maintenance | + /:id/open, /:id/close |
+| /api/fuel | CRUD |
+| /api/expenses | CRUD |
+| /api/ships | + /:id/dock, /:id/depart |
+| /api/docks | CRUD |
+| /api/warehouses | CRUD |
+| /api/rail-tracks | CRUD |
+| /api/analytics/kpis | Dashboard KPIs |
+| /api/analytics/charts | Chart data |
+| /api/port-health | Port Health Score |
+| /api/recommend | Smart recommendation |
+| /api/reports/fleet | Reports (multiple) |
+| /api/notifications | + /:id/read, /read-all |
+| /api/activity | Recent activity |
+| /api/settings | Get/update settings |
+| /api/users | Admin only |
+| /api/events | SSE stream |
 
 ---
 
 ## ⚙️ ENVIRONMENT VARIABLES
 
-### Frontend (`.env`)
-```
+### Frontend (frontend/.env)
+```env
 VITE_API_URL=http://localhost:5000/api
 VITE_SSE_URL=http://localhost:5000/api/events
 VITE_CLOUDFLARE_WORKER_URL=https://your-worker.workers.dev
 ```
 
-### Backend (`.env`)
-```
+### Backend (backend/.env)
+```env
 DATABASE_URL=postgresql://user:password@localhost:5432/vadhvan_port
 JWT_SECRET=your-jwt-secret-min-32-chars
 JWT_REFRESH_SECRET=your-refresh-secret-min-32-chars
@@ -307,88 +434,118 @@ BCRYPT_ROUNDS=12
 ALLOWED_ORIGINS=http://localhost:5173
 ```
 
+### Demo Credentials (from seed)
+- Admin: `admin@vadhvanport.in` / `Admin@123`
+- Manager: `manager@vadhvanport.in` / `Manager@123`
+- Fleet: `fleet@vadhvanport.in` / `Fleet@123`
+- Driver: `driver@vadhvanport.in` / `Driver@123`
+
 ---
 
 ## 🏭 DEPLOYMENT
 
 | Service | Platform |
 |---------|----------|
-| Frontend | Vercel |
+| Frontend | Vercel (auto deploy on push) |
 | Backend | Render / Railway |
 | Database | PostgreSQL (Render / Supabase) |
-| Real-time | SSE via backend + Cloudflare Worker |
+| Real-time | SSE via backend + Cloudflare Worker proxy |
 | CI/CD | GitHub Actions |
 
 ---
 
 ## 🔄 DEVELOPMENT STATUS
 
-### Phase 1 – Foundation ✅ (Session 1)
+### Session 1 – Foundation ✅
 - [x] AI_MEMORY.md created
 - [x] README.md created
-- [ ] Frontend project scaffolded
-- [ ] Backend project scaffolded
-- [ ] Prisma schema created
-- [ ] Seed data created
+- [x] Frontend scaffold (React + Vite + TypeScript)
+- [x] Tailwind config with full design system
+- [x] index.css with component classes
+- [x] types/index.ts – complete TypeScript interfaces
+- [x] services/api.ts – complete Axios service layer
+- [x] contexts/AuthContext.tsx
+- [x] contexts/SSEContext.tsx
+- [x] AppLayout + Sidebar + TopNavBar
+- [x] Backend scaffold (Node.js + Express + TypeScript)
+- [x] Prisma schema (complete, 19 models)
+- [x] Seed data (realistic port operations data)
+- [x] Backend utils: jwt.ts, response.ts, sseManager.ts
+- [x] Backend config: env.ts
 
-### Phase 2 – Core Modules
-- [ ] Authentication (Login + JWT)
-- [ ] Dashboard (KPIs + charts)
-- [ ] Fleet Management (CRUD)
-- [ ] Driver Management (CRUD)
-- [ ] Trip Management (lifecycle)
-- [ ] Container Operations (Kanban)
-- [ ] Equipment Management
+### Session 2 – Core Application ✅ (In Progress)
+- [x] AI_MEMORY.md updated with complete architecture
+- [ ] Backend: src/index.ts (Express app)
+- [ ] Backend: middlewares (auth, role, errorHandler, rateLimiter)
+- [ ] Backend: validators/index.ts (all Zod schemas)
+- [ ] Backend: all services (15+)
+- [ ] Backend: all controllers + routes (15+)
+- [ ] Frontend: App.tsx (React Router setup)
+- [ ] Frontend: LoginPage
+- [ ] Frontend: DashboardPage (KPIs + charts)
+- [ ] Frontend: CommandCenterPage
+- [ ] Frontend: FleetPage
+- [ ] Frontend: DriversPage
+- [ ] Frontend: TripsPage
+- [ ] Frontend: ContainersPage (Kanban)
+- [ ] Frontend: EquipmentPage
+- [ ] Frontend: MaintenancePage
+- [ ] Frontend: FuelPage
+- [ ] Frontend: ShipsPage
+- [ ] Frontend: DocksPage
+- [ ] Frontend: WarehousesPage
+- [ ] Frontend: RailPage
+- [ ] Frontend: ReportsPage
+- [ ] Frontend: AnalyticsPage
+- [ ] Frontend: NotificationsPage
+- [ ] Frontend: SettingsPage
+- [ ] Shared UI components (KPICard, StatusBadge, charts, etc.)
 
-### Phase 3 – Advanced Modules
-- [ ] Port Command Center
-- [ ] Ship Arrival Module
-- [ ] Dock Management
-- [ ] Smart Resource Recommendation
-- [ ] Smart Dispatch Engine
-- [ ] Maintenance Module
-- [ ] Fuel & Expense
-
-### Phase 4 – Intelligence & Real-time
-- [ ] SSE real-time updates
-- [ ] Port Health Score
-- [ ] Analytics & Reports
-- [ ] Maps Module (Leaflet)
-- [ ] Warehouse Management
-- [ ] Rail Dispatch
-
-### Phase 5 – Polish & Deploy
-- [ ] Notifications Center
-- [ ] Settings Module
-- [ ] Activity & Audit Logs
-- [ ] Docker setup
+### Session 3 – Polish & Deploy (Planned)
+- [ ] Docker + docker-compose.yml
 - [ ] GitHub Actions CI/CD
-- [ ] Production build verified
+- [ ] Offline GPS sync
+- [ ] Leaflet maps integration
+- [ ] Production build verification
+- [ ] Final AI_MEMORY.md + README.md update
 
 ---
 
 ## ⚠️ CRITICAL RULES (Never Break)
 
-1. **Business Logic**: All validation happens server-side in services layer
-2. **Design**: Colors MUST match portsync DESIGN.md palette
-3. **No placeholders**: Every module must be functional
-4. **PostgreSQL only**: Never use SQLite
-5. **JWT**: Access 15min, Refresh 7d, httpOnly cookies
-6. **Status Atomicity**: Vehicle + Driver status changes are atomic in transactions
-7. **Role Guards**: Every API endpoint has role middleware
-8. **SSE**: Dashboard KPIs update via SSE without page refresh
-9. **Seed Data**: Always seed realistic port operations data
-10. **TypeScript strict**: No `any` types, proper interfaces everywhere
+1. **Design**: ALL colors MUST use tailwind tokens from tailwind.config.js
+2. **No placeholders**: Every module fetches real data from API
+3. **PostgreSQL only**: Never use SQLite or in-memory DBs
+4. **JWT**: Access 15min, Refresh 7d httpOnly cookie
+5. **Status Atomicity**: Vehicle + Driver status in Prisma $transaction
+6. **Role Guards**: Every sensitive API route has requireRole() middleware
+7. **SSE**: Dashboard KPIs update via SSE without page refresh
+8. **TypeScript strict**: No `any` types allowed anywhere
+9. **Prisma model name**: MaintenanceLogs (PLURAL) not MaintenanceLog
+10. **Business rules**: All enforced server-side in services layer
 
 ---
 
-## 📝 NOTES FOR FUTURE SESSIONS
+## 📝 SESSION NOTES
 
-- Design files in `Design/` are reference-only — read `Design/portsync/DESIGN.md` for the color system
-- The design uses Public Sans + Inter fonts
-- Primary color `#0B1F33` = Deep Navy (sidebar)
-- Secondary color `#2D5BFF` = Port Blue (CTAs)  
-- The `command_center_dashboard` design shows the Port Command Center layout
-- The `operations_fleet_management` design shows the vehicle table layout
-- The `operations_container_kanban` shows the Kanban board
-- The `portsync_login` shows the login page layout
+### Design Reference Files
+```
+Design/portsync/DESIGN.md         → Color system + typography reference
+Design/portsync_login/            → Login page layout reference
+Design/command_center_dashboard/  → Command center layout reference
+Design/operations_fleet_management/ → Vehicle table layout reference
+Design/operations_container_kanban/ → Container Kanban layout reference
+Design/admin_dashboard_overview/  → Dashboard overview reference
+```
+
+### Known Issues / Decisions
+- Leaflet maps: use placeholder div if actual map integration causes issues
+- SSE: frontend EventSource must handle CORS (withCredentials)
+- Prisma schema path: prisma schema is in `backend/src/prisma/` not root
+
+### Next Session Priority
+1. Verify all pages compile and render
+2. Test login flow end-to-end
+3. Add Docker configuration
+4. GitHub Actions workflow
+5. Maps integration (Leaflet + OpenStreetMap)
